@@ -1,0 +1,56 @@
+Stoplight Program
+
+main(){
+	map[][]						//To be instantiated in setup()	
+	
+	setup()						//Read in grid, and create intersection objects
+
+	spawnCars()					//Spawn cars, run the car constructor
+
+	while(){
+		tick()
+		printMap()				//Print out map to the terminal
+	}
+
+}
+
+Class Road:
+	vars:
+		exitDirection(s)
+		isOccupied
+		Location tuple
+
+	functions:
+		setup()					//Constructor
+		setExitDirections()
+		getExitDirections()
+
+
+Class Car:
+	vars:
+		currentPosition
+		endPosition
+		totalTime
+		Route [directions]
+		
+	functions:
+		setup()					//Constructor
+		calculateRoute()
+		move()
+
+
+Class Controller:
+	vars:
+		roads[][]
+		states[]				//Each state group of roads with direction of each road, tracking current directions in map
+		timer					//How long to stay in a direction
+
+	functions:
+		setup()					//Constructor
+		switchState()			//Change state of roads on the map
+
+
+//Map input file syntax
+N,S,E,W - Directions
+I - Intersection
+* - Blank space
