@@ -61,15 +61,15 @@ def moveCars():
 
 	# Check the status of each car to see if they can move or not
 	for car in activeCars:
-		print "Car %d: Start Loc: (%d,%d) Current Loc: (%d, %d), %s" % (car.carID, car.startLoc[0], car.startLoc[1], car.currentLoc[0], car.currentLoc[1], car.route)
+		#print "Car %d: Start Loc: (%d,%d) Current Loc: (%d, %d), %s" % (car.carID, car.startLoc[0], car.startLoc[1], car.currentLoc[0], car.currentLoc[1], car.route)
 		
 		# If the car is currently in a square with exitDirection North
 		if map[car.currentLoc[0]][car.currentLoc[1]].exitDirection == 1:
 			# check if square to the North is empty and matches direction of the next step in route
-			print "Car %d: Checking direction North" % (car.carID)
+			#print "Car %d: Checking direction North" % (car.carID)
 
 			if map[car.currentLoc[0]][car.currentLoc[1] - 1].exitDirection == car.route[0] and map[car.currentLoc[0]][car.currentLoc[1] - 1].isOccupied == False:
-				print "Car %d: Success North" % (car.carID)
+				#print "Car %d: Success North" % (car.carID)
 				car.nextLoc = [car.currentLoc[0],car.currentLoc[1] - 1]
 
 
@@ -77,10 +77,10 @@ def moveCars():
 		# If the car is currently in a square with exitDirection South
 		elif map[car.currentLoc[0]][car.currentLoc[1]].exitDirection == 2:
 			# check if square to the South is empty and matches direction of the next step in route
-			print "Car %d: Checking direction South" % (car.carID)
+			#print "Car %d: Checking direction South" % (car.carID)
 
 			if map[car.currentLoc[0]][car.currentLoc[1] + 1].exitDirection == car.route[0] and map[car.currentLoc[0]][car.currentLoc[1] + 1].isOccupied == False:
-				print "Car %d: Success South" % (car.carID)
+				#print "Car %d: Success South" % (car.carID)
 				car.nextLoc = [car.currentLoc[0],car.currentLoc[1] + 1]
 
 
@@ -88,10 +88,10 @@ def moveCars():
 		# If the car is currently in a square with exitDirection West
 		elif map[car.currentLoc[0]][car.currentLoc[1]].exitDirection == 3:
 			# check if square to the West is empty and matches direction of the next step in route
-			print "Car %d: Checking direction West" % (car.carID)
+			#print "Car %d: Checking direction West" % (car.carID)
 
 			if map[car.currentLoc[0] - 1][car.currentLoc[1]].exitDirection == car.route[0] and map[car.currentLoc[0] - 1][car.currentLoc[1]].isOccupied == False:
-				print "Car %d: Success West" % (car.carID)
+				#print "Car %d: Success West" % (car.carID)
 				car.nextLoc = [car.currentLoc[0] - 1,car.currentLoc[1]]
 
 
@@ -99,10 +99,10 @@ def moveCars():
 		# If the car is currently in a square with exitDirection East
 		elif map[car.currentLoc[0]][car.currentLoc[1]].exitDirection == 4:
 			# check if square to the East is empty and matches direction of the next step in route
-			print "Car %d: Checking direction East" % (car.carID)
+			#print "Car %d: Checking direction East" % (car.carID)
 
 			if map[car.currentLoc[0] + 1][car.currentLoc[1]].exitDirection == car.route[0] and map[car.currentLoc[0] + 1][car.currentLoc[1]].isOccupied == False:
-				print "Car %d: Success East" % (car.carID)
+				#print "Car %d: Success East" % (car.carID)
 				car.nextLoc = [car.currentLoc[0] + 1,car.currentLoc[1]]
 
 		print "Car %d: Next Move to (%d, %d)" % (car.carID, car.nextLoc[0], car.nextLoc[1])
@@ -140,8 +140,8 @@ def main():
 	#create car objects and add them to the map
 	print "Adding Cars"
 	spawnCar([2,0],[2,9], 1, [2,2,2,2,2,2,2,2,2])
-	spawnCar([3,9],[5,5], 2, [1,1,1,4,4,4])
-	spawnCar([3,8],[5,5], 3, [1,1,4,4,4])
+	spawnCar([3,9],[5,0], 2, [1,1,1,4,4,1,1,1,1,1,1])
+	spawnCar([3,8],[5,0], 3, [1,1,4,4,1,1,1,1,1,1])
 	printMap()
 
 
