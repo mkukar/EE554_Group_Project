@@ -1,6 +1,10 @@
-# Car
+# Car.py
+# EE554 Group Project
+# Spring 2017
+# Car class
 
 import Constants
+
 
 class Car(object):
 
@@ -12,3 +16,6 @@ class Car(object):
 		self.currentLoc = startLoc
 		self.nextLoc = startLoc
 		self.step = 0
+
+    def moveCar():
+        print "IN PROGRESS"

@@ -1,10 +1,14 @@
 # Main.py
+# EE554 Group Project
+# Spring 2017
 
 from Road import *
 from Car import *
 import Constants
 
+# #
 # global variables
+# #
 
 mapFileName = "map.txt"
 sizeList = []
@@ -12,7 +16,9 @@ activeCars = []
 counter = 0
 map = [[Road() for i in range(2)] for j in range(2)] # an array of roads
 
+# #
 # functions
+# #
 
 def readMap():
 	global map
@@ -46,7 +52,7 @@ def printMap():
 				print "(%s, C)" % (map[x][y].exitDirection) ,
 			else:
 				print "(%s,  )" % (map[x][y].exitDirection) ,
-		print 
+		print
 
 def spawnCar(startLoc, endLoc, carID, direction):
 	global map

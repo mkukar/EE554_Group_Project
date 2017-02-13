@@ -1,21 +1,26 @@
+# Road.py
+# EE554 Group Project
+# Spring 2017
+
 
 import Constants
 
 class Road:
 
+	# #
 	# constructors
-	#def __init__(self,
+	# #
 
-	def Road():
+	def Road(self):
 		print "this might be unncessary Road Constructor try removing with debug"
 
-	def Road(locXIn, locYIn, dirIn):
+	def Road(self, locXIn, locYIn, dirIn):
 		exitDirection = dirIn
 		xLoc = locXIn
 		yLoc = locYIn
 		location = [xLoc, yLoc]
 
-	def Road(locIn, dirIn):
+	def Road(self, locIn, dirIn):
 		exitDirection = dirIn
 		if (len(locIn) == 2):
 			location = locIn
@@ -24,8 +29,10 @@ class Road:
 		else:
 			print "You fucked up in Road.py Constructor"
 
+	# #
+	# Variables
+	# #
 
-	# variables
 	exitDirection = Constants.NO_DIR # defaults to up
 	isOccupied = False
 	xLoc = -1
