@@ -4,6 +4,7 @@
 
 from Road import *
 from Car import *
+from TimeObject import *
 import Constants
 
 # #
@@ -13,6 +14,7 @@ import Constants
 mapFileName = "map.txt"
 sizeList = []
 activeCars = []
+timeObjects = []
 counter = 0
 map = [[Road() for i in range(2)] for j in range(2)] # an array of roads
 

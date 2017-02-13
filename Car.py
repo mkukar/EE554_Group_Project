@@ -4,9 +4,9 @@
 # Car class
 
 import Constants
+from TimeObject import *
 
-
-class Car(object):
+class Car(TimeObject):
 
 	def __init__(self, startLoc, endLoc, carID, route):
 		self.startLoc = startLoc
@@ -16,6 +16,12 @@ class Car(object):
 		self.currentLoc = startLoc
 		self.nextLoc = startLoc
 		self.step = 0
+
+	def tick(self):
+		if self.currentLoc != self.endLoc:
+			moveCar()
+		else:
+			print "Does something else, probably despawns car? or something"
 
     def moveCar():
         print "IN PROGRESS"

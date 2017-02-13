@@ -4,9 +4,10 @@
 # Controls the stoplights
 
 from Road import *
+from TimeObject import *
 import Constants
 
-class Stoplight():
+class Stoplight(TimeObject):
 
     # #
     # Constructors
