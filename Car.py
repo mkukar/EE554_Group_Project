@@ -19,9 +19,9 @@ class Car(TimeObject):
 
 	def tick(self):
 		if self.currentLoc != self.endLoc:
-			moveCar()
+			self.moveCar()
 		else:
 			print "Does something else, probably despawns car? or something"
 
-    def moveCar():
-        print "IN PROGRESS"
+	def moveCar(self):
+		print "MOVECAR() IN PROGRESS"

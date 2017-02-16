@@ -33,7 +33,7 @@ class Road:
 	# Variables
 	# #
 
-	exitDirection = Constants.NO_DIR # defaults to up
+	exitDirection = Constants.NO_DIR # defaults to no direction
 	isOccupied = False
 	xLoc = -1
 	yLoc = -1

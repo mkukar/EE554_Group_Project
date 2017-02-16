@@ -13,17 +13,28 @@ class Stoplight(TimeObject):
     # Constructors
     # #
 
-    def Stoplight(self):
+    def Stoplight(self, mapIn, cordsIn):
         # default constructor
-        print "IP"
+        self.map = mapIn
+        self.coordinates = cordsIn
+        self.setup()
+
+
+    # allows for the timer to be altered globally
+    def Stoplight(self, mapIn, cordsIn, maxTimer):
+        self.map = mapIn
+        self.coordinates = cordsIn
+        self.timerMax = maxTimer
+        self.setup()
 
 
     # #
     # Variables
     # #
 
+    coordinates = {} # dictionary mapping x to y coordinates for the roads we can effect
     roads = []
-    states = []
+    states = [] # array of different states of the roads in different configurations
     timer = 0
     timerMax = 30
 
@@ -32,6 +43,8 @@ class Stoplight(TimeObject):
     # Functions
     # #
 
+
+    # takes in what squares it occupies and sets up states based on those squares
     def setup(self):
         print "IP"
 
@@ -41,4 +54,7 @@ class Stoplight(TimeObject):
 
 
     def tick(self):
-        print "IP"
+        self.timer = self.timer + 1
+        if self.timer >= self.timerMax:
+            self.changeState()
+            self.timer = 0

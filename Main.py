@@ -4,6 +4,7 @@
 
 from Road import *
 from Car import *
+from Stoplight import *
 from TimeObject import *
 import Constants
 
@@ -47,7 +48,10 @@ def readMap():
 			elif (line[x] == '*'):
 				map[x][y].exitDirection = Constants.NO_DIR
 
+
 def printMap():
+	'''
+	# OLD WAY
 	for y in range(int(sizeList[1])):
 		for x in range(int(sizeList[0])):
 			if map[x][y].isOccupied == True:
@@ -55,6 +59,27 @@ def printMap():
 			else:
 				print "(%s,  )" % (map[x][y].exitDirection) ,
 		print
+	'''
+	# new printing method uses unicode + overlays the cars directly on the road
+	for y in range(int(sizeList[1])):
+		for x in range(int(sizeList[0])):
+			if map[x][y].isOccupied == True:
+				print 'C',
+			elif map[x][y].exitDirection == Constants.LEFT_DIR:
+				print u'\u2190', # unicode character for left arrow
+			elif map[x][y].exitDirection == Constants.RIGHT_DIR:
+				print u'\u2192', # unicode character for right arrow
+			elif map[x][y].exitDirection == Constants.UP_DIR:
+				print u'\u2191',
+			elif map[x][y].exitDirection == Constants.DOWN_DIR:
+				print u'\u2193',
+			elif map[x][y].exitDirection == Constants.NO_DIR:
+				print '*',
+			else:
+				print ' ',
+		print
+
+
 
 def spawnCar(startLoc, endLoc, carID, direction):
 	global map
@@ -141,6 +166,7 @@ def moveCars():
 # Main
 
 def main():
+
 	# need to make main a true main
 	readMap()
 	printMap()
