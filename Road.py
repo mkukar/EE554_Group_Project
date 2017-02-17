@@ -12,7 +12,8 @@ class Road:
 	# #
 
 	def Road(self):
-		print "this might be unncessary Road Constructor try removing with debug"
+		# print "this might be unncessary Road Constructor try removing with debug"
+		pass
 
 	def Road(self, locXIn, locYIn, dirIn):
 		exitDirection = dirIn

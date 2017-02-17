@@ -32,10 +32,8 @@ def readMap():
 	print(sizeList)
 	map = [[Road() for i in range(int(sizeList[1]))] for j in range(int(sizeList[0]))]
 	for y in range(int(sizeList[1])):
-		#print y
 		line = fileIn.readline().upper()
 		for x in range(int(sizeList[0])):
-			#print "," + str(x)
 			map[x][y].location = [x,y]
 			if (line[x] == 'U'):
 				map[x][y].exitDirection = Constants.UP_DIR
@@ -47,6 +45,10 @@ def readMap():
 				map[x][y].exitDirection = Constants.RIGHT_DIR
 			elif (line[x] == '*'):
 				map[x][y].exitDirection = Constants.NO_DIR
+			# handles creating a stoplight group
+			elif (line[x] == 'S'):
+				print("STOPLIGHT CREATION IN PROGRESS")
+
 
 
 def printMap():
