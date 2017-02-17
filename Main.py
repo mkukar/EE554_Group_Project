@@ -12,9 +12,10 @@ import Constants
 # global variables
 # #
 
+simTime = 20
+
 mapFileName = "map.txt"
 sizeList = []
-activeCars = []
 timeObjects = []
 counter = 0
 map = [[Road() for i in range(2)] for j in range(2)] # an array of roads
@@ -29,22 +30,21 @@ def readMap():
 	global sizeList
 	fileIn = open(mapFileName, 'r') # double check this
 	sizeList = fileIn.readline().strip().split(',')
-	print(sizeList)
 	map = [[Road() for i in range(int(sizeList[1]))] for j in range(int(sizeList[0]))]
 	for y in range(int(sizeList[1])):
 		line = fileIn.readline().upper()
 		for x in range(int(sizeList[0])):
 			map[x][y].location = [x,y]
 			if (line[x] == 'U'):
-				map[x][y].exitDirection = Constants.UP_DIR
+				map[x][y].exitDirection = [Constants.UP_DIR]
 			elif (line[x] == 'D'):
-				map[x][y].exitDirection = Constants.DOWN_DIR
+				map[x][y].exitDirection = [Constants.DOWN_DIR]
 			elif (line[x] == 'L'):
-				map[x][y].exitDirection = Constants.LEFT_DIR
+				map[x][y].exitDirection = [Constants.LEFT_DIR]
 			elif (line[x] == 'R'):
-				map[x][y].exitDirection = Constants.RIGHT_DIR
+				map[x][y].exitDirection = [Constants.RIGHT_DIR]
 			elif (line[x] == '*'):
-				map[x][y].exitDirection = Constants.NO_DIR
+				map[x][y].exitDirection = [Constants.NO_DIR]
 			# handles creating a stoplight group
 			elif (line[x] == 'S'):
 				print("STOPLIGHT CREATION IN PROGRESS")
@@ -65,17 +65,18 @@ def printMap():
 	# new printing method uses unicode + overlays the cars directly on the road
 	for y in range(int(sizeList[1])):
 		for x in range(int(sizeList[0])):
+			# print map[x][y].exitDirection
 			if map[x][y].isOccupied == True:
 				print 'C',
-			elif map[x][y].exitDirection == Constants.LEFT_DIR:
+			elif Constants.LEFT_DIR in map[x][y].exitDirection:
 				print u'\u2190', # unicode character for left arrow
-			elif map[x][y].exitDirection == Constants.RIGHT_DIR:
+			elif Constants.RIGHT_DIR in map[x][y].exitDirection:
 				print u'\u2192', # unicode character for right arrow
-			elif map[x][y].exitDirection == Constants.UP_DIR:
+			elif Constants.UP_DIR in map[x][y].exitDirection:
 				print u'\u2191',
-			elif map[x][y].exitDirection == Constants.DOWN_DIR:
+			elif Constants.DOWN_DIR in map[x][y].exitDirection:
 				print u'\u2193',
-			elif map[x][y].exitDirection == Constants.NO_DIR:
+			elif Constants.NO_DIR in map[x][y].exitDirection:
 				print '*',
 			else:
 				print ' ',
@@ -85,11 +86,11 @@ def printMap():
 
 def spawnCar(startLoc, endLoc, carID, direction):
 	global map
-	global activeCars
+	global timeObjects
 	map[startLoc[0]][startLoc[1]].isOccupied = True
+	timeObjects.append(Car(startLoc,endLoc, carID, direction, map))
 
-	activeCars.append(Car(startLoc,endLoc, carID, direction))
-
+'''
 def moveCars():
 	global map
 	global counter
@@ -162,32 +163,51 @@ def moveCars():
 	# Simple counter to test the movement mechanism by waiting to change the direction of (3,5) to East after 6 clocks
 	counter += 1
 	if counter == 6:
-		map[3][5].exitDirection = 4
-
+		map[3][5].exitDirection = [Constants.RIGHT_DIR]
+'''
 
 # Main
 
 def main():
 
+	print "Initializing map..."
+
 	# need to make main a true main
 	readMap()
 	printMap()
 
+	print "\nInitializing cars..."
+
 	#create car objects and add them to the map
-	print "Adding Cars"
 	spawnCar([2,0],[2,9], 1, [2,2,2,2,2,2,2,2,2])
 	spawnCar([3,9],[5,0], 2, [1,1,1,4,4,1,1,1,1,1,1])
 	spawnCar([3,8],[5,0], 3, [1,1,4,4,1,1,1,1,1,1])
 	printMap()
 
+	print "\nInitialization complete."
 
-	# 10 steps should take place, car should move each time
-	while activeCars:
-		moveCars()
+
+	print "Simulation Start\n"
+
+	for x in range(simTime):
+		for obj in timeObjects:
+			if obj.type == "Stoplight":
+				obj.tick()
+			elif obj.type == "Car":
+				obj.setNextLocation()
+		for obj in timeObjects:
+			if obj.type == "Car":
+				res = obj.moveCar()
+				if res is True:
+					map[obj.currentLoc[0]][obj.currentLoc[1]].isOccupied = False
+					timeObjects.remove(obj)
+
 		printMap()
 		print
 
-	print "All cars have reached their destinations"
+
+
+	print "\nSimulation Complete"
 
 
 if __name__ == "__main__": 

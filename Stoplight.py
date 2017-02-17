@@ -37,7 +37,7 @@ class Stoplight(TimeObject):
     states = [] # array of different states of the roads in different configurations
     timer = 0
     timerMax = 30
-
+    type = "Stoplight"
 
     # #
     # Functions
