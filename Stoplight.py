@@ -13,13 +13,13 @@ class Stoplight(TimeObject):
     # Constructors
     # #
 
-    def __init__(self, mapIn, startX, startY):
+    def __init__(self, mapIn, startX, startY, xSizeIn, ySizeIn):
         # default constructor
         self.map = mapIn
         self.startIndex = [startX, startY]
-        self.endIndex = [startX, startY]
-        self.xSize = 1
-        self.ySize = 1
+        self.endIndex = [startX + (xSizeIn - 1), startY + (ySizeIn - 1)]
+        self.xSize = xSizeIn
+        self.ySize = ySizeIn
 
         # setup will auto-size the start and end index accordingly
         self.setup()
@@ -36,7 +36,7 @@ class Stoplight(TimeObject):
     curStateIndex = 0
     states = [] # array of different states of the roads in different configurations, one for each state
     timer = 0
-    timerMax = 5
+    timerMax = 10
     type = "Stoplight"
 
     # #
@@ -48,27 +48,93 @@ class Stoplight(TimeObject):
     def setup(self):
         print "IP IN STOPLIGHT SETUP"
 
+        # ALGORITHM SUMMARY
+
+        # Initialize all variables
+        self.roads = [[Road() for y in range(self.ySize)] for x in range(self.xSize)]
+        for y in range(self.ySize):
+            for x in range(self.xSize):
+                # initializes roads to no direction and occupation is the same as it was previously
+                self.roads[x][y].exitDirection = [Constants.NO_DIR]
+                self.roads[x][y].isOccupied = self.map[x + self.startIndex[0]][y + self.startIndex[1]].isOccupied
+                self.roads[x][y].location = self.map[x + self.startIndex[0]][y + self.startIndex[1]]
+
+        upDownState = [[Road() for y in range(self.ySize)] for x in range(self.xSize)]
+        for y in range(self.ySize):
+            for x in range(self.xSize):
+                # initializes roads to no direction and occupation is the same as it was previously
+                upDownState[x][y].exitDirection = [Constants.NO_DIR]
+                upDownState[x][y].isOccupied = self.map[x + self.startIndex[0]][y + self.startIndex[1]].isOccupied
+                upDownState[x][y].location = self.map[x + self.startIndex[0]][y + self.startIndex[1]]
+
+        leftRightState = [[Road() for y in range(self.ySize)] for x in range(self.xSize)]
+        for y in range(self.ySize):
+            for x in range(self.xSize):
+                # initializes roads to no direction and occupation is the same as it was previously
+                leftRightState[x][y].exitDirection = [Constants.NO_DIR]
+                leftRightState[x][y].isOccupied = self.map[x + self.startIndex[0]][y + self.startIndex[1]].isOccupied
+                leftRightState[x][y].location = self.map[x + self.startIndex[0]][y + self.startIndex[1]]
+
+        # Now determine each state individually (up/down state, then left/right state)
+
+        # UP DOWN STATE DETECTION
+        validState = False
+        for column in range(self.xSize):
+            if self.map[column + self.startIndex[0]][self.startIndex[1] - 1].exitDirection == \
+                    self.map[column + self.startIndex[0]][self.startIndex[1] + self.ySize].exitDirection:
+                if Constants.DOWN_DIR in self.map[column + self.startIndex[0]][self.startIndex[1] - 1].exitDirection   or \
+                    Constants.UP_DIR in self.map[column + self.startIndex[0]][self.startIndex[1] - 1].exitDirection:
+                    validState = True
+                    for yIndex in range(self.ySize):
+                        upDownState[column][yIndex].exitDirection = self.map[column + self.startIndex[0]][self.startIndex[1]-1].exitDirection
+        if validState:
+            self.states.append(upDownState)
+
+
+        # RIGHT LEFT STATE DETECTION
+        validState = False
+        for row in range(self.ySize):
+            # checks left and right index equal, and it is a L or R
+            if self.map[self.startIndex[0] - 1][self.startIndex[1] + row].exitDirection == \
+                    self.map[self.startIndex[0] + self.xSize][self.startIndex[1] + row].exitDirection:
+                if Constants.LEFT_DIR in self.map[self.startIndex[0] - 1][self.startIndex[1] + row].exitDirection or \
+                    Constants.RIGHT_DIR in self.map[self.startIndex[0] - 1][self.startIndex[1] + row].exitDirection:
+                    validState = True
+                    for xIndex in range(self.xSize):
+                        leftRightState[xIndex][row].exitDirection = self.map[self.startIndex[0] - 1][self.startIndex[1] + row].exitDirection
+        if validState:
+            self.states.append(leftRightState)
+
+
+        # Now setup the first state and write it to the map
+        if len(self.states) == 0:
+            print("NO VALID STATES, INTERSECTION WILL BE TURNED OFF")
+            self.states.append(self.roads)
+        self.roads = self.states[self.curStateIndex]
+        self.writeStateToMap(self.curStateIndex)
+
+        '''
         # TEST CODE, ERASE LATER
         # creates a singlular index with two states just for fun
         # relies on "stoplight_map_test.txt"
-        self.xSize = 1
-        self.ySize = 1
+        #self.xSize = 1
+        #self.ySize = 1
         self.endIndex = self.startIndex
-        self.roads = [[Road() for x in range(self.xSize)] for y in range(self.ySize)]
+        self.roads = [[Road() for y in range(self.ySize)] for x in range(self.xSize)]
         for y in range(self.ySize):
             for x in range(self.xSize):
                 # initializes roads to no direction and occupation is the same as it was previously
                 self.roads[x][y].exitDirection = [Constants.NO_DIR]
                 self.roads[x][y].isOccupied = self.map[x + self.startIndex[0]][y + self.startIndex[1]].isOccupied
 
-        state1 = [[Road() for x in range(self.xSize)] for y in range(self.ySize)]
+        state1 = [[Road() for y in range(self.ySize)] for x in range(self.xSize)]
         for y in range(self.ySize):
             for x in range(self.xSize):
                 # initializes roads to no direction and occupation is the same as it was previously
                 state1[x][y].exitDirection = [Constants.UP_DIR]
                 state1[x][y].isOccupied = self.map[x + self.startIndex[0]][y + self.startIndex[1]].isOccupied
 
-        state2 = [[Road() for x in range(self.xSize)] for y in range(self.ySize)]
+        state2 = [[Road() for y in range(self.ySize)] for x in range(self.xSize)]
         for y in range(self.ySize):
             for x in range(self.xSize):
                 # initializes roads to no direction and occupation is the same as it was previously
@@ -80,7 +146,7 @@ class Stoplight(TimeObject):
 
         self.roads = self.states[self.curStateIndex]
         self.writeStateToMap(self.curStateIndex)
-
+        '''
 
     def changeState(self):
         print("CHANGING STATE...")

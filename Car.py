@@ -18,10 +18,12 @@ class Car(TimeObject):
 		self.step = 0
 		self.type = "Car"
 		self.map = map
+		self.timeAlive = 0
 
 	def tick(self):
 		if self.currentLoc != self.endLoc:
 			self.moveCar()
+			self.timeAlive = self.timeAlive + 1 # keeps track of how long the cars have been running alive
 		else:
 			print "Does something else, probably despawns car? or something"
 
@@ -48,6 +50,7 @@ class Car(TimeObject):
 	def moveCar(self):
 
 		if self.nextLoc != self.currentLoc:
+			self.timeAlive = self.timeAlive + 1
 			self.map[self.currentLoc[0]][self.currentLoc[1]].isOccupied = False
 			self.currentLoc = self.nextLoc
 			del self.route[0]

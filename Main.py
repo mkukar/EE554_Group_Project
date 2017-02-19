@@ -20,6 +20,9 @@ timeObjects = []
 counter = 0
 map = [[Road() for i in range(2)] for j in range(2)] # an array of roads
 
+averageLifespan = 0
+totalCars = 0
+
 # #
 # functions
 # #
@@ -30,7 +33,61 @@ def readMap():
 	global sizeList
 	fileIn = open(mapFileName, 'r') # double check this
 	sizeList = fileIn.readline().strip().split(',')
+	# copies the entire file into a 2-d array that we can read from sequentially
+	# modified this way to handle the stoplight class searching for 'S' objects in 2 dimensions
+	strMap = [[' ' for y in range(int(sizeList[1]))] for x in range(int(sizeList[0]))]
 	map = [[Road() for i in range(int(sizeList[1]))] for j in range(int(sizeList[0]))]
+	for y in range(int(sizeList[1])):
+		line = fileIn.readline().upper()
+		for x in range(int(sizeList[0])):
+			strMap[x][y] = str(line[x])
+			map[x][y].location = [x,y]
+			# initializes only the roads UDLR*, ignores S
+			if (strMap[x][y] == 'U'):
+				map[x][y].exitDirection = [Constants.UP_DIR]
+			elif (strMap[x][y] == 'D'):
+				map[x][y].exitDirection = [Constants.DOWN_DIR]
+			elif (strMap[x][y] == 'L'):
+				map[x][y].exitDirection = [Constants.LEFT_DIR]
+			elif (strMap[x][y] == 'R'):
+				map[x][y].exitDirection = [Constants.RIGHT_DIR]
+			elif (strMap[x][y] == '*'):
+				map[x][y].exitDirection = [Constants.NO_DIR]
+			else:
+				map[x][y].exitDirection = [Constants.NO_DIR]
+	fileIn.close()
+
+
+
+	for y in range(int(sizeList[1])):
+		for x in range(int(sizeList[0])):
+
+			# handles creating a stoplight group and will automatically write to the rest of the road objects after called
+			if (strMap[x][y] == 'S'):
+				# main class determines the stoplight size because it has access to the actual file input
+				xSize = 0
+				ySize = 0
+				xScan = x
+				yScan = y
+				# checks all the x indices
+				while strMap[xScan][yScan] == 'S':
+					xSize = 0
+					while strMap[xScan][yScan] == 'S':
+						strMap[xScan][yScan] = '*'
+						xSize = xSize + 1
+						xScan = xScan + 1
+					xScan = x
+					ySize = ySize + 1
+					yScan = yScan + 1
+
+				print("DETECTED A STOPLIGHT OF SIZE (" + str(xSize) + "," + str(ySize) + ")")
+				timeObjects.append(Stoplight(map, x, y,xSize,ySize))
+
+	'''
+	# ORIGINAL READ METHOD
+	map = [[Road() for i in range(int(sizeList[1]))] for j in range(int(sizeList[0]))]
+
+
 	for y in range(int(sizeList[1])):
 		line = fileIn.readline().upper()
 		for x in range(int(sizeList[0])):
@@ -47,8 +104,9 @@ def readMap():
 				map[x][y].exitDirection = [Constants.NO_DIR]
 			# handles creating a stoplight group and will automatically write to the rest of the road objects after called
 			elif (line[x] == 'S'):
+				# main class determines the stoplight size because it has access to the actual file input
 				timeObjects.append(Stoplight(map, x, y))
-
+	'''
 
 
 def printMap():
@@ -87,6 +145,8 @@ def printMap():
 def spawnCar(startLoc, endLoc, carID, direction):
 	global map
 	global timeObjects
+	global totalCars
+	totalCars = totalCars + 1
 	map[startLoc[0]][startLoc[1]].isOccupied = True
 	timeObjects.append(Car(startLoc,endLoc, carID, direction, map))
 
@@ -170,6 +230,8 @@ def moveCars():
 
 def main():
 
+	global averageLifespan
+
 	print "Initializing map..."
 
 	# need to make main a true main
@@ -200,6 +262,9 @@ def main():
 				res = obj.moveCar()
 				if res is True:
 					map[obj.currentLoc[0]][obj.currentLoc[1]].isOccupied = False
+
+					print("CAR DESPAWNED. WAS ALIVE FOR " + str(obj.timeAlive))
+					averageLifespan = averageLifespan + obj.timeAlive
 					timeObjects.remove(obj)
 
 		printMap()
@@ -208,6 +273,8 @@ def main():
 
 
 	print "\nSimulation Complete"
+	averageLifespan = averageLifespan/totalCars
+	print("Average Travel Time: " + str(averageLifespan))
 
 
 if __name__ == "__main__": 
