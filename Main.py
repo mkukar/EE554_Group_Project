@@ -45,9 +45,9 @@ def readMap():
 				map[x][y].exitDirection = [Constants.RIGHT_DIR]
 			elif (line[x] == '*'):
 				map[x][y].exitDirection = [Constants.NO_DIR]
-			# handles creating a stoplight group
+			# handles creating a stoplight group and will automatically write to the rest of the road objects after called
 			elif (line[x] == 'S'):
-				print("STOPLIGHT CREATION IN PROGRESS")
+				timeObjects.append(Stoplight(map, x, y))
 
 
 
