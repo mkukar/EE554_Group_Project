@@ -21,6 +21,7 @@ counter = 0
 map = [[Road() for i in range(2)] for j in range(2)] # an array of roads
 
 averageLifespan = 0
+carsArrived = 0
 totalCars = 0
 
 # #
@@ -231,6 +232,7 @@ def moveCars():
 def main():
 
 	global averageLifespan
+	global carsArrived
 
 	print "Initializing map..."
 
@@ -264,7 +266,8 @@ def main():
 					map[obj.currentLoc[0]][obj.currentLoc[1]].isOccupied = False
 
 					print("CAR DESPAWNED. WAS ALIVE FOR " + str(obj.timeAlive))
-					averageLifespan = averageLifespan + obj.timeAlive
+					averageLifespan += obj.timeAlive
+					carsArrived += 1
 					timeObjects.remove(obj)
 
 		printMap()
@@ -273,8 +276,9 @@ def main():
 
 
 	print "\nSimulation Complete"
-	averageLifespan = averageLifespan/totalCars
+	averageLifespan = averageLifespan/carsArrived
 	print("Average Travel Time: " + str(averageLifespan))
+	print("Cars arrived: " + str(carsArrived) + " of " + str(totalCars))
 
 
 if __name__ == "__main__": 
