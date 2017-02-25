@@ -36,17 +36,20 @@ class Stoplight(TimeObject):
     curStateIndex = 0
     states = [] # array of different states of the roads in different configurations, one for each state
     timer = 0
-    timerMax = 10
+    timerMax = 6
     type = "Stoplight"
 
     # #
     # Functions
     # #
 
+    # allows for yellow lights to prevent erasing cars
+    def yellow_light(self, curState, nextState):
+        print("IP")
+
 
     # takes in what squares it occupies and sets up states based on those squares
     def setup(self):
-        print "IP IN STOPLIGHT SETUP"
 
         # ALGORITHM SUMMARY
 
@@ -169,4 +172,11 @@ class Stoplight(TimeObject):
         roadsToWrite = self.states[stateIndex]
         for y in range(self.ySize):
             for x in range(self.xSize):
+                # first checks if the state is currently occupied to make sure it doesn't get erased
+                stateOccupied = False
+                if self.map[x + self.startIndex[0]][y + self.startIndex[1]].isOccupied:
+                    stateOccupied = True
+
+                # now copies over the index
                 self.map[x + self.startIndex[0]][y + self.startIndex[1]] = roadsToWrite[x][y]
+                self.map[x + self.startIndex[0]][y + self.startIndex[1]].isOccupied = stateOccupied
