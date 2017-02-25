@@ -93,6 +93,12 @@ class Stoplight(TimeObject):
     # takes in what squares it occupies and sets up states based on those squares
     def setup(self):
 
+        # Sets the size of the yellow light timer
+        if self.ySize > self.xSize:
+            self.yellowTimerMax = self.ySize
+        else:
+            self.yellowTimerMax = self.xSize
+
         # ALGORITHM SUMMARY
 
         # Initialize all variables
