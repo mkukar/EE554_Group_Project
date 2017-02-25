@@ -37,15 +37,57 @@ class Stoplight(TimeObject):
     states = [] # array of different states of the roads in different configurations, one for each state
     timer = 0
     timerMax = 6
+    yellowTimer = 0
+    yellowTimerMax = 2 # should scale to the max length of the longest road itself
     type = "Stoplight"
+    subMap = [[]]
 
     # #
     # Functions
     # #
 
-    # allows for yellow lights to prevent erasing cars
-    def yellow_light(self, curState, nextState):
-        print("IP")
+    # allows for yellow lights to prevent erasing cars (blocks cars from entering intersection)
+    def yellow_light(self):
+
+        if self.yellowTimer == 0:
+            print("INITIALIZING YELLOW LIGHT")
+            # sets all the intersection entry points to not allow any cars into the intersections
+            # still will allow exit directions (e.g. > > > > will become * > > > to allow cars only to leave
+
+            # saves current map state (aligned to -1,-1 of intersection
+
+            self.subMap = [[Road() for y in range(self.ySize + 2)] for x in range(self.xSize + 2)]
+            for y in range(self.ySize + 2):
+                for x in range(self.xSize + 2):
+                    self.subMap[x][y].exitDirection = self.map[self.startIndex[0] - 1 + x][self.startIndex[1] - 1 + y].exitDirection
+
+            # now overwrites initial map with a map with no entries into the intersection
+            for x in range(self.xSize):
+                # DOWN IS ENTRANCE
+                if Constants.DOWN_DIR in self.map[self.startIndex[0] + x][self.startIndex[1] - 1].exitDirection:
+                    self.map[self.startIndex[0] + x][self.startIndex[1] - 1].exitDirection = [Constants.NO_DIR]
+
+                # UP IS ENTRANCE
+                if Constants.UP_DIR in self.map[self.startIndex[0] + x][self.startIndex[1] + self.ySize].exitDirection:
+                    self.map[self.startIndex[0] + x][self.startIndex[1] + self.ySize].exitDirection = [Constants.NO_DIR]
+
+            for y in range(self.ySize):
+                # RIGHT IS ENTRANCE
+                if Constants.RIGHT_DIR in self.map[self.startIndex[0] - 1][self.startIndex[1] + y].exitDirection:
+                    self.map[self.startIndex[0] - 1][self.startIndex[1] + y].exitDirection = [Constants.NO_DIR]
+
+                # LEFT IS ENTRANCE
+                if Constants.LEFT_DIR in self.map[self.startIndex[0] + self.xSize][self.startIndex[1] + y].exitDirection:
+                    self.map[self.startIndex[0] + self.xSize][self.startIndex[1] + y].exitDirection = [Constants.NO_DIR]
+
+        elif self.yellowTimer >= self.yellowTimerMax:
+            print("RESETTING YELLOW TIMER")
+            # goes back to self.subMap
+            for y in range(self.ySize + 2):
+                for x in range(self.xSize + 2):
+                    self.map[self.startIndex[0] - 1 + x][self.startIndex[1] - 1 + y].exitDirection = self.subMap[x][y].exitDirection
+
+        self.yellowTimer += 1
 
 
     # takes in what squares it occupies and sets up states based on those squares
@@ -163,8 +205,15 @@ class Stoplight(TimeObject):
     def tick(self):
         self.timer = self.timer + 1
         if self.timer >= self.timerMax:
-            self.changeState()
-            self.timer = 0
+            # first goes into yellow light state (ticks inside there until completion)
+            if(self.yellowTimer <= self.yellowTimerMax):
+                print("YELLOW LIGHT")
+                self.yellow_light()
+            else:
+                self.yellowTimer = 0 # resets timer
+                # now changes state and starts the next one
+                self.changeState()
+                self.timer = 0
 
 
     def writeStateToMap(self, stateIndex):
