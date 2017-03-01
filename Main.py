@@ -278,8 +278,8 @@ def main():
 					carsArrived += 1
 					timeObjects.remove(obj)
 
-		printMap()
-		print
+		#printMap()
+		#print
 
 
 
