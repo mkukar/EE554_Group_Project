@@ -7,6 +7,12 @@ from Road import *
 from TimeObject import *
 import Constants
 
+# TO DO
+# - handle any edge cases (or design map around them)
+# - add right turn functionality (add to each state initialization)
+# - add left turn functionality
+#   - update map to prevent entrance of side roads during intersection (similar strategy as yellow light)
+
 class Stoplight(TimeObject):
 
     # #
@@ -50,7 +56,7 @@ class Stoplight(TimeObject):
     def yellow_light(self):
 
         if self.yellowTimer == 0:
-            print("INITIALIZING YELLOW LIGHT")
+            # print("INITIALIZING YELLOW LIGHT")
             # sets all the intersection entry points to not allow any cars into the intersections
             # still will allow exit directions (e.g. > > > > will become * > > > to allow cars only to leave
 
@@ -81,7 +87,7 @@ class Stoplight(TimeObject):
                     self.map[self.startIndex[0] + self.xSize][self.startIndex[1] + y].exitDirection = [Constants.NO_DIR]
 
         elif self.yellowTimer >= self.yellowTimerMax:
-            print("RESETTING YELLOW TIMER")
+            # print("RESETTING YELLOW TIMER")
             # goes back to self.subMap
             for y in range(self.ySize + 2):
                 for x in range(self.xSize + 2):
@@ -200,7 +206,7 @@ class Stoplight(TimeObject):
         '''
 
     def changeState(self):
-        print("CHANGING STATE...")
+        # print("CHANGING STATE...")
         self.curStateIndex = self.curStateIndex + 1
         if self.curStateIndex >= len(self.states):
             self.curStateIndex = 0
@@ -213,7 +219,7 @@ class Stoplight(TimeObject):
         if self.timer >= self.timerMax:
             # first goes into yellow light state (ticks inside there until completion)
             if(self.yellowTimer <= self.yellowTimerMax):
-                print("YELLOW LIGHT")
+                # print("YELLOW LIGHT")
                 self.yellow_light()
             else:
                 self.yellowTimer = 0 # resets timer
@@ -223,7 +229,7 @@ class Stoplight(TimeObject):
 
 
     def writeStateToMap(self, stateIndex):
-        print("WRITING STATE " + str(stateIndex) + " TO MAP")
+        # print("WRITING STATE " + str(stateIndex) + " TO MAP")
         roadsToWrite = self.states[stateIndex]
         for y in range(self.ySize):
             for x in range(self.xSize):

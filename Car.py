@@ -8,7 +8,12 @@ from TimeObject import *
 
 class Car(TimeObject):
 
+	# original constructor with route pre-planned
 	def __init__(self, startLoc, endLoc, carID, route, map):
+		#if route is None:
+	#		self.route = self.calculateRoute()
+	#	else:
+		self.route = route
 		self.startLoc = startLoc
 		self.endLoc = endLoc
 		self.carID = carID
@@ -48,9 +53,9 @@ class Car(TimeObject):
 
 	# returns True when car reaches its final destination
 	def moveCar(self):
-
+		self.timeAlive = self.timeAlive + 1
 		if self.nextLoc != self.currentLoc:
-			self.timeAlive = self.timeAlive + 1
+
 			self.map[self.currentLoc[0]][self.currentLoc[1]].isOccupied = False
 			self.currentLoc = self.nextLoc
 			del self.route[0]
@@ -60,3 +65,7 @@ class Car(TimeObject):
 			return True
 		else:
 			return False
+
+	# Calculates the route using the internal start and end points, along with the map itself
+	def calculateRoute(self):
+		print("ROUTE PLANNING IN PROGRESS - DO NOT USE")

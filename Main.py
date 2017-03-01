@@ -12,7 +12,7 @@ import Constants
 # global variables
 # #
 
-simTime = 20
+simTime = 100
 
 mapFileName = "map.txt"
 sizeList = []
@@ -243,9 +243,17 @@ def main():
 	print "\nInitializing cars..."
 
 	#create car objects and add them to the map
+	'''
 	spawnCar([2,0],[2,9], 1, [2,2,2,2,2,2,2,2,2])
 	spawnCar([3,9],[5,0], 2, [1,1,1,4,4,1,1,1,1,1,1])
 	spawnCar([3,8],[5,0], 3, [1,1,4,4,1,1,1,1,1,1])
+	'''
+	# new method to create cars just spawns them in a straight line
+	for x in range(5):
+		spawnCar([2 + (6*x),0], [2 + (6*x),29], 1, [Constants.DOWN_DIR] * 30)
+		spawnCar([2 + (6*x),1], [2 + (6*x),29], 1, [Constants.DOWN_DIR] * 29)
+		spawnCar([0,3 + (6*x)], [29,3 + (6*x)], 1, [Constants.RIGHT_DIR] * 30)
+		spawnCar([1,3 + (6*x)], [29,3 + (6*x)], 1, [Constants.RIGHT_DIR] * 29)
 	printMap()
 
 	print "\nInitialization complete."
@@ -265,7 +273,7 @@ def main():
 				if res is True:
 					map[obj.currentLoc[0]][obj.currentLoc[1]].isOccupied = False
 
-					print("CAR DESPAWNED. WAS ALIVE FOR " + str(obj.timeAlive))
+					#print("CAR DESPAWNED. WAS ALIVE FOR " + str(obj.timeAlive))
 					averageLifespan += obj.timeAlive
 					carsArrived += 1
 					timeObjects.remove(obj)
