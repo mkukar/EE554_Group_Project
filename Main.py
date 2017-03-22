@@ -81,7 +81,7 @@ def readMap():
 					ySize = ySize + 1
 					yScan = yScan + 1
 
-				print("DETECTED A STOPLIGHT OF SIZE (" + str(xSize) + "," + str(ySize) + ")")
+				# print("DETECTED A STOPLIGHT OF SIZE (" + str(xSize) + "," + str(ySize) + ")")
 				timeObjects.append(Stoplight(map, x, y,xSize,ySize))
 
 	'''
