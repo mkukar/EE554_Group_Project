@@ -2,6 +2,9 @@
 
 import time
 
+from Road import *
+import Constants
+
 class Algorithm():
 
 	# #
@@ -25,7 +28,7 @@ class Algorithm():
 	# SUMMARY: Calculates the next state using our core algorithm within the time requirement set in constructor
 	# ARGS: curState - current state map with cars
 	# RETURNS: nextState - map of same size as curState with new directions for the map
-	def calcNextState(self, curState):
+	def calcNextState(self, curState, sizeList):
 		# starts a timer from current datetime until curTime + timeConstraintFloat in seconds
 		curTime = time.time()
 		endTime = curTime + self.timeConstraintFloat
@@ -46,5 +49,35 @@ class Algorithm():
 	# SUMMARY: Most important function - calculates the heuristic by simulating the next state
 	# ARGS: stateIn - map state in to calculate its heuristic value (how good is it)
 	# RETURNS: heuristicVal - integer number representing our heuristic value
-	def calc_heuristic(self, stateIn):
-		print("IP")
+	# HEURISTICIN KEY:
+	# 1 = use overall left/right up/down (returns [leftrighttrafficpercentage, updowntrafficpercentage])
+	# 2 = use per stoplight left/right up/down (returns 2d array of above, 1 for each stop light)
+	#
+
+	def calc_heuristic(self, stateIn, sizeList, heuristicIn):
+		res = []
+		if heuristicIn == 1:
+			print("IN PROGRESS")
+			# iterates across the state and counts how many squares that are <- or -> are occupied, then ^ down occupation)
+			totalLeftRight = 0
+			occupiedLeftRight = 0
+			totalUpDown = 0
+			occupiedUpDown = 0
+
+			for y in range(int(sizeList[1])):
+				for x in range(int(sizeList[0])):
+					if Constants.DOWN_DIR in stateIn[x][y].exitDirection or Constants.UP_DIR in stateIn[x][y].exitDirection:
+						totalUpDown += 1
+						if stateIn[x][y].isOccupied == True:
+							occupiedUpDown += 1
+					elif Constants.LEFT_DIR in stateIn[x][y].exitDirection or Constants.RIGHT_DIR in stateIn[x][y].exitDirection:
+						totalLeftRight += 1
+						if stateIn[x][y].isOccupied == True:
+							occupiedLeftRight += 1
+
+			res = [float(occupiedLeftRight)/totalLeftRight, float(occupiedUpDown)/totalUpDown]
+		elif heuristicIn == 2:
+			print("IN PROGRESS")
+		else:
+			print("INVALID HEURISTIC CODE")
+		return res
