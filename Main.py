@@ -223,7 +223,7 @@ def main():
 		map = algo.calcNextState(map, sizeList)
 
 		# TESTING HEURISTIC ONLY
-		print(algo.calc_heuristic(map, sizeList, 1))
+		print(algo.calc_heuristic(map, sizeList, 1, timeObjects))
 
 		# moves cars
 		for x in range(simTime):
