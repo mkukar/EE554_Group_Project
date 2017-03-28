@@ -9,17 +9,19 @@ from Stoplight import *
 from TimeObject import *
 import Constants
 from Algorithm import *
+import random
 
 # #
 # global variables
 # #
 
-simTime = 100
+simTime = 3
 timeConstraint = 0.33
 
 mapFileName = "map.txt"
 sizeList = []
 timeObjects = []
+validStartIndexes = []
 counter = 0
 map = [[Road() for i in range(2)] for j in range(2)] # an array of roads
 
@@ -35,6 +37,8 @@ def readMap():
 	global map
 	global mapFileName
 	global sizeList
+	global validStartIndexes
+
 	fileIn = open(mapFileName, 'r') # double check this
 	sizeList = fileIn.readline().strip().split(',')
 	# copies the entire file into a 2-d array that we can read from sequentially
@@ -61,6 +65,28 @@ def readMap():
 				map[x][y].exitDirection = [Constants.NO_DIR]
 	fileIn.close()
 
+	# Scan through outside edges of the map to find all valid starting locations
+	for side in range(4):
+		if (side == 0):
+			# find all valid starting locations on the North side of the map
+			for index in range(int(sizeList[0])):
+				if (map[index][0].exitDirection == [Constants.DOWN_DIR]):
+					validStartIndexes.append([index,0])
+		if (side == 1):
+			# find all valid starting locations on the South side of the map
+			for index in range(int(sizeList[0])):
+				if (map[index][int(sizeList[1]) - 1].exitDirection == [Constants.UP_DIR]):
+					validStartIndexes.append([index,int(sizeList[1]) - 1])
+		if (side == 2):
+			# find all valid starting locations on the West side of the map
+			for index in range(int(sizeList[1])):
+				if (map[0][index].exitDirection == [Constants.RIGHT_DIR]):
+					validStartIndexes.append([0,index])
+		if (side == 3):
+			# find all valid starting locations on the East side of the map
+			for index in range(int(sizeList[1])):
+				if (map[int(sizeList[0]) - 1][index].exitDirection == [Constants.LEFT_DIR]):
+					validStartIndexes.append([int(sizeList[0]) - 1,index])
 
 
 	for y in range(int(sizeList[1])):
@@ -124,13 +150,39 @@ def spawnCar(carID):
 	timeObjects.append(Car(startLoc,endLoc, carID, direction, map))
 	'''
 
-	print("IP")
+	print 'Spawning car with ID # ', carID
 
 	global map
 	global timeObjects
 	global totalCars
+	global validStartIndexes
 
 	totalCars = totalCars + 1
+
+	tempindexVal = random.randint(0,len(validStartIndexes) - 1)
+	tempStartLoc = validStartIndexes[tempindexVal]
+	
+	# calculate the end location and route of the new car
+	if Constants.UP_DIR in map[tempStartLoc[0]][tempStartLoc[1]].exitDirection:
+		tempEndLoc = [tempStartLoc[0], tempStartLoc[1] - (int(sizeList[1]) - 1)]
+		tempRoute = [Constants.UP_DIR] * int(sizeList[1])
+	elif Constants.DOWN_DIR in map[tempStartLoc[0]][tempStartLoc[1]].exitDirection:
+		tempEndLoc = [tempStartLoc[0], tempStartLoc[1] + (int(sizeList[1]) - 1)]
+		tempRoute = [Constants.DOWN_DIR] * int(sizeList[1])
+	elif Constants.LEFT_DIR in map[tempStartLoc[0]][tempStartLoc[1]].exitDirection:
+		tempEndLoc = [tempStartLoc[0] - (int(sizeList[0]) - 1), tempStartLoc[1]]
+		tempRoute = [Constants.LEFT_DIR] * int(sizeList[0])
+	elif Constants.RIGHT_DIR in map[tempStartLoc[0]][tempStartLoc[1]].exitDirection:
+		tempEndLoc = [tempStartLoc[0] + (int(sizeList[0]) - 1), tempStartLoc[1]]
+		tempRoute = [Constants.RIGHT_DIR] * int(sizeList[0])
+
+	print "Start Loc: ", tempStartLoc
+	print "End Loc: ", tempEndLoc
+	print "route: ", tempRoute
+
+	if (map[tempStartLoc[0]][tempStartLoc[1]].isOccupied == False):
+		map[tempStartLoc[0]][tempStartLoc[1]].isOccupied = True
+		timeObjects.append(Car(tempStartLoc,tempEndLoc, carID, tempRoute, map))
 
 	# randomly spawn here
 
@@ -150,20 +202,25 @@ def main():
 
 	print "Initializing algorithm...\n"
 	# initialize algorithm class here
-	algo = Algorithm(timeConstraint)
+	#algo = Algorithm(timeConstraint)
 
 	print "Initialization complete.\n"
 
+	# print "Number of valid start indexes: ", len(validStartIndexes)
+	# for x in range(len(validStartIndexes)):
+	# 	print validStartIndexes[x]
 
 	print "Simulation Start\n"
 
 	for x in range(simTime): # sim time is how many times to run a simulation tick (1 car length)
 
 		# randomly spawns new cars
-		print("CAR SPAWN IP")
+		spawnCar(x)
+		printMap()
+		#print("CAR SPAWN IP")
 
 		# takes a snapshot of the current state and runs the algorithm on it (REAL TIME CONSTRAINED)
-		map = algo.calcNextState(map)
+		#map = algo.calcNextState(map)
 
 		# moves cars
 		for x in range(simTime):
