@@ -54,10 +54,9 @@ class Algorithm():
 	# 2 = use per stoplight left/right up/down (returns 2d array of above, 1 for each stop light)
 	#
 
-	def calc_heuristic(self, stateIn, sizeList, heuristicIn):
+	def calc_heuristic(self, stateIn, sizeList, heuristicIn, timeObjects):
 		res = []
 		if heuristicIn == 1:
-			print("IN PROGRESS")
 			# iterates across the state and counts how many squares that are <- or -> are occupied, then ^ down occupation)
 			totalLeftRight = 0
 			occupiedLeftRight = 0
@@ -77,6 +76,12 @@ class Algorithm():
 
 			res = [float(occupiedLeftRight)/totalLeftRight, float(occupiedUpDown)/totalUpDown]
 		elif heuristicIn == 2:
+			# iterates across each of the stoplight objects and determines how many squares are occupied around them
+			for obj in timeObjects:
+				if obj.type == "Stoplight": # maybe change this to an int for faster execution time?
+					# first looks at
+					print("ITERATION IN PROGRESS")
+
 			print("IN PROGRESS")
 		else:
 			print("INVALID HEURISTIC CODE")
