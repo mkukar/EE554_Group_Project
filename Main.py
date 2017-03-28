@@ -15,7 +15,7 @@ import random
 # global variables
 # #
 
-simTime = 3
+simTime = 100
 timeConstraint = 0.33
 
 mapFileName = "map.txt"
@@ -182,6 +182,7 @@ def spawnCar(carID):
 
 	if (map[tempStartLoc[0]][tempStartLoc[1]].isOccupied == False):
 		map[tempStartLoc[0]][tempStartLoc[1]].isOccupied = True
+		print("SETTING LOCATION TO OCCUPIED AT " + str(tempStartLoc[0]) + ',' + str(tempStartLoc[1]))
 		timeObjects.append(Car(tempStartLoc,tempEndLoc, carID, tempRoute, map))
 
 	# randomly spawn here
@@ -214,6 +215,7 @@ def main():
 
 	for x in range(simTime): # sim time is how many times to run a simulation tick (1 car length)
 
+		print("TOCK")
 		# randomly spawns new cars
 		spawnCar(x)
 		printMap()
@@ -225,21 +227,22 @@ def main():
 		# TESTING HEURISTIC ONLY
 		print(algo.calc_heuristic(map, sizeList, 1, timeObjects))
 
-		# moves cars
-		for x in range(simTime):
-			for obj in timeObjects:
-				if obj.type == "Car":
-					obj.setNextLocation()
-			for obj in timeObjects:
-				if obj.type == "Car":
-					res = obj.moveCar()
-					if res is True:
-						map[obj.currentLoc[0]][obj.currentLoc[1]].isOccupied = False
+		print("TICK")
+		for obj in timeObjects:
+			if obj.type == "Car":
+				obj.setNextLocation()
+			#elif obj.type == "Stoplight":
+		#		obj.tick()
+		for obj in timeObjects:
+			if obj.type == "Car":
+				res = obj.moveCar()
+				if res is True:
+					map[obj.currentLoc[0]][obj.currentLoc[1]].isOccupied = False
 
-						#print("CAR DESPAWNED. WAS ALIVE FOR " + str(obj.timeAlive))
-						averageLifespan += obj.timeAlive
-						carsArrived += 1
-						timeObjects.remove(obj)
+					print("CAR DESPAWNED. WAS ALIVE FOR " + str(obj.timeAlive))
+					averageLifespan += obj.timeAlive
+					carsArrived += 1
+					timeObjects.remove(obj)
 
 	print "Simulation Complete\n"
 	printMap()

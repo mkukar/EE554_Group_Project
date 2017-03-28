@@ -21,14 +21,16 @@ class Stoplight(TimeObject):
 
     def __init__(self, mapIn, startX, startY, xSizeIn, ySizeIn):
         # default constructor
-        self.map = mapIn
+        self.map = mapIn[:][:]
         self.startIndex = [startX, startY]
         self.endIndex = [startX + (xSizeIn - 1), startY + (ySizeIn - 1)]
         self.xSize = xSizeIn
         self.ySize = ySizeIn
 
         # setup will auto-size the start and end index accordingly
+        print("SETTING UP STOPLIGHT")
         self.setup()
+        print("STOPLIGHT SETUP COMPLETE")
 
     # #
     # Variables
@@ -122,6 +124,8 @@ class Stoplight(TimeObject):
                 # initializes roads to no direction and occupation is the same as it was previously
                 upDownState[x][y].exitDirection = [Constants.NO_DIR]
                 upDownState[x][y].isOccupied = self.map[x + self.startIndex[0]][y + self.startIndex[1]].isOccupied
+                if upDownState[x][y].isOccupied:
+                    print("SET SOMETHING TO UP DOWN OCCUPIED L126 Stoplight.py")
                 upDownState[x][y].location = self.map[x + self.startIndex[0]][y + self.startIndex[1]]
 
         leftRightState = [[Road() for y in range(self.ySize)] for x in range(self.xSize)]
@@ -130,6 +134,8 @@ class Stoplight(TimeObject):
                 # initializes roads to no direction and occupation is the same as it was previously
                 leftRightState[x][y].exitDirection = [Constants.NO_DIR]
                 leftRightState[x][y].isOccupied = self.map[x + self.startIndex[0]][y + self.startIndex[1]].isOccupied
+                if leftRightState[x][y].isOccupied:
+                    print("SET SOMETHING TO LEFT RIGHT OCCUPIED L136 Stoplight.py")
                 leftRightState[x][y].location = self.map[x + self.startIndex[0]][y + self.startIndex[1]]
 
         # Now determine each state individually (up/down state, then left/right state)
@@ -237,7 +243,10 @@ class Stoplight(TimeObject):
                 stateOccupied = False
                 if self.map[x + self.startIndex[0]][y + self.startIndex[1]].isOccupied:
                     stateOccupied = True
+                    print("IS OCCUPIED Stoplight.py L246")
 
                 # now copies over the index
                 self.map[x + self.startIndex[0]][y + self.startIndex[1]] = roadsToWrite[x][y]
                 self.map[x + self.startIndex[0]][y + self.startIndex[1]].isOccupied = stateOccupied
+                if stateOccupied:
+                    print("WROTE SOMETHING OCCUPIED Stoplight.py L249")
