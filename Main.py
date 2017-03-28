@@ -202,7 +202,7 @@ def main():
 
 	print "Initializing algorithm...\n"
 	# initialize algorithm class here
-	#algo = Algorithm(timeConstraint)
+	algo = Algorithm(timeConstraint)
 
 	print "Initialization complete.\n"
 
