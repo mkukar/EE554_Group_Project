@@ -220,7 +220,10 @@ def main():
 		#print("CAR SPAWN IP")
 
 		# takes a snapshot of the current state and runs the algorithm on it (REAL TIME CONSTRAINED)
-		#map = algo.calcNextState(map)
+		map = algo.calcNextState(map, sizeList)
+
+		# TESTING HEURISTIC ONLY
+		print(algo.calc_heuristic(map, sizeList, 1))
 
 		# moves cars
 		for x in range(simTime):
