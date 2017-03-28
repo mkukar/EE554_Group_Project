@@ -110,18 +110,22 @@ def readMap():
 					ySize = ySize + 1
 					yScan = yScan + 1
 
-				# print("DETECTED A STOPLIGHT OF SIZE (" + str(xSize) + "," + str(ySize) + ")")
+				#print("DETECTED A STOPLIGHT OF SIZE (" + str(xSize) + "," + str(ySize) + ")")
+				#if len(timeObjects) <= 24:
+				#	print("CREATED STOPLIGHT - ERASE THIS LATER FOR DEBUG in Main.py L115")
+				#	print("x - " + str(x) + " y - " + str(y) + " xSize - " + str(xSize) + " ySize - " + str(ySize))
 				timeObjects.append(Stoplight(map, x, y,xSize,ySize))
 
 
 def printMap():
-
+	#counter = 0
 	# new printing method uses unicode + overlays the cars directly on the road
 	for y in range(int(sizeList[1])):
 		for x in range(int(sizeList[0])):
 			# print map[x][y].exitDirection
-			if map[x][y].isOccupied == True:
+			if map[x][y].isOccupied:
 				print 'C',
+				#counter += 1
 			elif Constants.LEFT_DIR in map[x][y].exitDirection:
 				print u'\u2190', # unicode character for left arrow
 			elif Constants.RIGHT_DIR in map[x][y].exitDirection:
@@ -135,6 +139,7 @@ def printMap():
 			else:
 				print ' ',
 		print
+	#print("COUNTER = " + str(counter))
 
 
 
@@ -182,7 +187,7 @@ def spawnCar(carID):
 
 	if (map[tempStartLoc[0]][tempStartLoc[1]].isOccupied == False):
 		map[tempStartLoc[0]][tempStartLoc[1]].isOccupied = True
-		print("SETTING LOCATION TO OCCUPIED AT " + str(tempStartLoc[0]) + ',' + str(tempStartLoc[1]))
+		#print("SETTING LOCATION TO OCCUPIED AT " + str(tempStartLoc[0]) + ',' + str(tempStartLoc[1]))
 		timeObjects.append(Car(tempStartLoc,tempEndLoc, carID, tempRoute, map))
 
 	# randomly spawn here
@@ -211,11 +216,28 @@ def main():
 	# for x in range(len(validStartIndexes)):
 	# 	print validStartIndexes[x]
 
+	'''
+	print "DEBUGGING STOPLIGHTS FIRST"
+	counter = 0
+	carCounter = 0
+	for obj in timeObjects:
+		if obj.type == "Stoplight":
+			print "STOPLIGHT DETECTED WITH COORDINATES " + str(obj.startIndex)
+			counter += 1
+		elif obj.time == "Car":
+			carCounter += 1
+	print("TOTAL STOPLIGHTS: " + str(counter))
+	print("TOTAL CARS: " + str(carCounter))
+
+	print("CHANGING ONE ROAD IN A SINGLE STOPLIGHT...")
+	map[3][3].exitDirection = [Constants.LEFT_DIR]
+	print("THIS SHOULD ONLY CHANGE ONE OF THE INTERSECTIONS")
+	'''
+
 	print "Simulation Start\n"
 
 	for x in range(simTime): # sim time is how many times to run a simulation tick (1 car length)
 
-		print("TOCK")
 		# randomly spawns new cars
 		spawnCar(x)
 		printMap()
@@ -227,7 +249,6 @@ def main():
 		# TESTING HEURISTIC ONLY
 		print(algo.calc_heuristic(map, sizeList, 1, timeObjects))
 
-		print("TICK")
 		for obj in timeObjects:
 			if obj.type == "Car":
 				obj.setNextLocation()

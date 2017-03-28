@@ -28,9 +28,7 @@ class Stoplight(TimeObject):
         self.ySize = ySizeIn
 
         # setup will auto-size the start and end index accordingly
-        print("SETTING UP STOPLIGHT")
         self.setup()
-        print("STOPLIGHT SETUP COMPLETE")
 
     # #
     # Variables
@@ -116,8 +114,9 @@ class Stoplight(TimeObject):
                 # initializes roads to no direction and occupation is the same as it was previously
                 self.roads[x][y].exitDirection = [Constants.NO_DIR]
                 self.roads[x][y].isOccupied = self.map[x + self.startIndex[0]][y + self.startIndex[1]].isOccupied
-                self.roads[x][y].location = self.map[x + self.startIndex[0]][y + self.startIndex[1]]
+                self.roads[x][y].location = self.map[x + self.startIndex[0]][y + self.startIndex[1]].location
 
+        #print("BUG IS HERE Stoplight.py L121 - L130 probably")
         upDownState = [[Road() for y in range(self.ySize)] for x in range(self.xSize)]
         for y in range(self.ySize):
             for x in range(self.xSize):
@@ -126,7 +125,7 @@ class Stoplight(TimeObject):
                 upDownState[x][y].isOccupied = self.map[x + self.startIndex[0]][y + self.startIndex[1]].isOccupied
                 if upDownState[x][y].isOccupied:
                     print("SET SOMETHING TO UP DOWN OCCUPIED L126 Stoplight.py")
-                upDownState[x][y].location = self.map[x + self.startIndex[0]][y + self.startIndex[1]]
+                upDownState[x][y].location = self.map[x + self.startIndex[0]][y + self.startIndex[1]].location
 
         leftRightState = [[Road() for y in range(self.ySize)] for x in range(self.xSize)]
         for y in range(self.ySize):
@@ -136,7 +135,7 @@ class Stoplight(TimeObject):
                 leftRightState[x][y].isOccupied = self.map[x + self.startIndex[0]][y + self.startIndex[1]].isOccupied
                 if leftRightState[x][y].isOccupied:
                     print("SET SOMETHING TO LEFT RIGHT OCCUPIED L136 Stoplight.py")
-                leftRightState[x][y].location = self.map[x + self.startIndex[0]][y + self.startIndex[1]]
+                leftRightState[x][y].location = self.map[x + self.startIndex[0]][y + self.startIndex[1]].location
 
         # Now determine each state individually (up/down state, then left/right state)
 
@@ -151,6 +150,7 @@ class Stoplight(TimeObject):
                     for yIndex in range(self.ySize):
                         upDownState[column][yIndex].exitDirection = self.map[column + self.startIndex[0]][self.startIndex[1]-1].exitDirection
         if validState:
+            #print("APPENDED UP DOWN STATE")
             self.states.append(upDownState)
 
 
@@ -170,6 +170,8 @@ class Stoplight(TimeObject):
 
 
         # Now setup the first state and write it to the map
+        #print("ERASE THIS LATER Stoplight.py L173 - FORCING NO VALID STATES")
+        #self.states[0] = self.roads
         if len(self.states) == 0:
             print("NO VALID STATES, INTERSECTION WILL BE TURNED OFF")
             self.states.append(self.roads)
@@ -237,8 +239,11 @@ class Stoplight(TimeObject):
     def writeStateToMap(self, stateIndex):
         # print("WRITING STATE " + str(stateIndex) + " TO MAP")
         roadsToWrite = self.states[stateIndex]
+        #print("ROADS TO WRITE INFO...")
         for y in range(self.ySize):
             for x in range(self.xSize):
+                #print("OCCUPIED: " + str(roadsToWrite[x][y].isOccupied))
+                #print("EXIT DIRS: " + str(roadsToWrite[x][y].exitDirection))
                 # first checks if the state is currently occupied to make sure it doesn't get erased
                 stateOccupied = False
                 if self.map[x + self.startIndex[0]][y + self.startIndex[1]].isOccupied:
@@ -246,7 +251,7 @@ class Stoplight(TimeObject):
                     print("IS OCCUPIED Stoplight.py L246")
 
                 # now copies over the index
-                self.map[x + self.startIndex[0]][y + self.startIndex[1]] = roadsToWrite[x][y]
-                self.map[x + self.startIndex[0]][y + self.startIndex[1]].isOccupied = stateOccupied
+                self.map[x + self.startIndex[0]][y + self.startIndex[1]].exitDirection = roadsToWrite[x][y].exitDirection
+                #self.map[x + self.startIndex[0]][y + self.startIndex[1]].isOccupied = stateOccupied
                 if stateOccupied:
                     print("WROTE SOMETHING OCCUPIED Stoplight.py L249")

@@ -60,8 +60,8 @@ class Car(TimeObject):
 			self.currentLoc = self.nextLoc
 			del self.route[0]
 			self.map[self.currentLoc[0]][self.currentLoc[1]].isOccupied = True
-			print("SETTING LOCATION OCCUPIED Car.py L63")
-			print("Coordinates are: " + str(self.currentLoc[0]) + "," + str(self.currentLoc[1]))
+			#print("SETTING LOCATION OCCUPIED Car.py L63")
+			#print("Coordinates are: " + str(self.currentLoc[0]) + "," + str(self.currentLoc[1]))
 
 		if self.currentLoc == self.endLoc:
 			return True
