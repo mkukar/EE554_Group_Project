@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b7509efa-e719-49e3-9194-6a90ff2ee606" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/DS_STORE_BACKUP" afterPath="" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/StoplightProgram" afterPath="$PROJECT_DIR$/Old Files/StoplightProgram" />
     </list>
     <ignored path="EE554_Group_Project.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -162,6 +163,11 @@
     <property name="settings.editor.splitter.proportion" value="0.2" />
     <property name="restartRequiresConfirmation" value="true" />
     <property name="FullScreen" value="false" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/Old Files" />
+    </key>
   </component>
   <component name="RunManager" selected="Python.Main (1)">
     <configuration default="false" name="Main" type="PythonConfigurationType" factoryName="Python" temporary="true">
@@ -510,7 +516,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/StoplightProgram">
+    <entry file="file://$PROJECT_DIR$/Old Files/StoplightProgram">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -575,7 +581,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/StoplightProgram">
+    <entry file="file://$PROJECT_DIR$/Old Files/StoplightProgram">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -633,7 +639,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/StoplightProgram">
+    <entry file="file://$PROJECT_DIR$/Old Files/StoplightProgram">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -691,7 +697,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/StoplightProgram">
+    <entry file="file://$PROJECT_DIR$/Old Files/StoplightProgram">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -708,13 +714,6 @@
             <element signature="e#10625#10841#0" expanded="false" />
             <element signature="e#10872#11355#0" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/StoplightProgram">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -835,6 +834,14 @@
           <folding>
             <element signature="e#16#27#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Old Files/StoplightProgram">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.41489363">
+          <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
