@@ -66,6 +66,7 @@ def readMap():
 				map[x][y].exitDirection = [Constants.NO_DIR]
 			else:
 				map[x][y].exitDirection = [Constants.NO_DIR]
+				map[x][y].partOfIntersection = True # only other case is that it is part of an intersection
 	fileIn.close()
 
 	# Scan through outside edges of the map to find all valid starting locations

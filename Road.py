@@ -39,5 +39,6 @@ class Road:
 	xLoc = -1
 	yLoc = -1
 	location = [xLoc, yLoc]
+	partOfIntersection = False # must be manually changed to TRUE
 
 	# NO FUNCTIONS

@@ -84,10 +84,16 @@ class Algorithm():
 
 			print("IN PROGRESS")
 		else:
-			print("INVALID HEURISTIC CODE")
+			print("INVALID HEURISTIC CODE. TRY USING 1 or 2")
 		return res
 
 	# calculates the heuristic of a single stoplight and returns it
 	def calc_single_stoplight_heuristic(self, stoplightObjIn, mapIn):
-		print("IN PROGRESS")
-		return 0
+		# iterates starting at the stoplight object in each direction on the map until it hits another stoplight or
+		# the end of the map
+		res = [0.0,0.0,0.0,0.0] # L R U D percentage
+
+		#
+
+		# returns [L,R,U,D] weighted
+		return res
