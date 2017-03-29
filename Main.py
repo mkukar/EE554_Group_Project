@@ -252,7 +252,7 @@ def main():
 		map = algo.calcNextState(map, sizeList)
 
 		# TESTING HEURISTIC ONLY
-		heuristicToUse = 1
+		heuristicToUse = 2
 		print(algo.calc_heuristic(map, sizeList, heuristicToUse, timeObjects))
 
 		for obj in timeObjects:

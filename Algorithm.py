@@ -80,7 +80,7 @@ class Algorithm():
 			for obj in timeObjects:
 				if obj.type == "Stoplight": # maybe change this to an int for faster execution time?
 					# first looks at each stoplight object and adds its ID to our array along with its sub-heuristic
-					res.append([obj.ID, self.calc_single_stoplight_heuristic(obj, stateIn)])
+					res.append([obj.ID, self.calc_single_stoplight_heuristic(obj, stateIn, sizeList)])
 
 			print("IN PROGRESS")
 		else:
@@ -88,12 +88,106 @@ class Algorithm():
 		return res
 
 	# calculates the heuristic of a single stoplight and returns it
-	def calc_single_stoplight_heuristic(self, stoplightObjIn, mapIn):
+	def calc_single_stoplight_heuristic(self, stoplightObjIn, mapIn, sizeList):
 		# iterates starting at the stoplight object in each direction on the map until it hits another stoplight or
 		# the end of the map
 		res = [0.0,0.0,0.0,0.0] # L R U D percentage
 
-		#
+		# ALGORITHM OVERVIEW
+		# checks a side
+		# if side has exit direction on same as side (e.g. constants.LEFT on LEFT side)
+		# 	- iterate down until you reach the edge of map or another stoplight
+		#	- count every occupied space. save value as a percentage at the end
+
+		# TOP
+		curX = 0
+		curY = 0
+		topTotal = 0
+		topOccupied = 0
+		for x in range(stoplightObjIn.xSize):
+			curX = x + stoplightObjIn.startIndex[0]
+			curY = stoplightObjIn.startIndex[1] - 1
+			print("CHECKING INDEX " + str(curX) + "," + str(curY))
+			if Constants.UP_DIR in mapIn[curX][curY].exitDirection:
+				print("ITERATING UPWARDS...")
+				while not mapIn[curX][curY].partOfIntersection and curY >= 0:
+					print(str(curX) + ',' + str(curY))
+					topTotal += 1
+					if mapIn[curX][curY].isOccupied:
+						topOccupied += 1
+					curY -= 1
+
+		if topTotal == 0: # prevents divide by zero errors
+			res[2] = 0.0
+		else:
+			res[2] = float(topOccupied)/topTotal
+
+
+		# BOTTOM
+
+		bottomTotal = 0
+		bottomOccupied = 0
+		for x in range(stoplightObjIn.xSize):
+			curX = x + stoplightObjIn.startIndex[0]
+			curY = stoplightObjIn.startIndex[1] + stoplightObjIn.ySize
+			print("CHECKING INDEX " + str(curX) + "," + str(curY))
+			if Constants.DOWN_DIR in mapIn[curX][curY].exitDirection:
+				print("ITERATING DOWNWARDS...")
+				while not mapIn[curX][curY].partOfIntersection and curY < (int(sizeList[1]) - 1):
+					print(str(curX) + ',' + str(curY))
+					bottomTotal += 1
+					if mapIn[curX][curY].isOccupied:
+						bottomOccupied += 1
+					curY += 1
+
+		if bottomTotal == 0: # prevent /0
+			res[3] = 0.0
+		else:
+			res[3] = float(bottomOccupied)/bottomTotal
+
+		# LEFT
+		leftTotal = 0
+		leftOccupied = 0
+		for y in range(stoplightObjIn.ySize):
+			curX = stoplightObjIn.startIndex[0] - 1
+			curY = y + stoplightObjIn.startIndex[1]
+			print("CHECKING INDEX " + str(curX) + "," + str(curY))
+			if Constants.LEFT_DIR in mapIn[curX][curY].exitDirection:
+				print("ITERATING LEFTWARDS...")
+				while not mapIn[curX][curY].partOfIntersection and curX >= 0:
+					print(str(curX) + ',' + str(curY))
+					leftTotal += 1
+					if mapIn[curX][curY].isOccupied:
+						leftOccupied += 1
+					curX -= 1
+
+		if leftTotal == 0:
+			res[0] = 0.0
+		else:
+			res[0] = float(leftOccupied)/leftTotal
+
+		# RIGHT
+		rightTotal = 0
+		rightOccupied = 0
+		for y in range(stoplightObjIn.ySize):
+			curX = stoplightObjIn.startIndex[0] + stoplightObjIn.xSize
+			curY = y + stoplightObjIn.startIndex[1]
+			print("CHECKING INDEX " + str(curX) + "," + str(curY))
+			if Constants.LEFT_DIR in mapIn[curX][curY].exitDirection:
+				print("ITERATING RIGHTWARDS...")
+				while not mapIn[curX][curY].partOfIntersection and curX < (int(sizeList[0]) - 1):
+					print(str(curX) + ',' + str(curY))
+					rightTotal += 1
+					if mapIn[curX][curY].isOccupied:
+						rightOccupied += 1
+					curX += 1
+
+		if rightTotal == 0:
+			res[1] = 0.0
+		else:
+			res[1] = float(rightOccupied)/rightTotal
 
 		# returns [L,R,U,D] weighted
 		return res
+
+
