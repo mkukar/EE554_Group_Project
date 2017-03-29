@@ -29,6 +29,8 @@ averageLifespan = 0
 carsArrived = 0
 totalCars = 0
 
+stoplight_ID_counter = 0
+
 # #
 # functions
 # #
@@ -38,6 +40,7 @@ def readMap():
 	global mapFileName
 	global sizeList
 	global validStartIndexes
+	global stoplight_ID_counter
 
 	fileIn = open(mapFileName, 'r') # double check this
 	sizeList = fileIn.readline().strip().split(',')
@@ -114,7 +117,8 @@ def readMap():
 				#if len(timeObjects) <= 24:
 				#	print("CREATED STOPLIGHT - ERASE THIS LATER FOR DEBUG in Main.py L115")
 				#	print("x - " + str(x) + " y - " + str(y) + " xSize - " + str(xSize) + " ySize - " + str(ySize))
-				timeObjects.append(Stoplight(map, x, y,xSize,ySize))
+				timeObjects.append(Stoplight(map, x, y,xSize,ySize, stoplight_ID_counter))
+				stoplight_ID_counter += 1 # keeps track of unique IDs
 
 
 def printMap():
@@ -247,7 +251,8 @@ def main():
 		map = algo.calcNextState(map, sizeList)
 
 		# TESTING HEURISTIC ONLY
-		print(algo.calc_heuristic(map, sizeList, 1, timeObjects))
+		heuristicToUse = 1
+		print(algo.calc_heuristic(map, sizeList, heuristicToUse, timeObjects))
 
 		for obj in timeObjects:
 			if obj.type == "Car":

@@ -19,13 +19,14 @@ class Stoplight(TimeObject):
     # Constructors
     # #
 
-    def __init__(self, mapIn, startX, startY, xSizeIn, ySizeIn):
+    def __init__(self, mapIn, startX, startY, xSizeIn, ySizeIn, ID_in):
         # default constructor
         self.map = mapIn[:][:]
         self.startIndex = [startX, startY]
         self.endIndex = [startX + (xSizeIn - 1), startY + (ySizeIn - 1)]
         self.xSize = xSizeIn
         self.ySize = ySizeIn
+        self.ID = ID_in # needs a unique ID to associate it with things
 
         # setup will auto-size the start and end index accordingly
         self.setup()

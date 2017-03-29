@@ -79,10 +79,15 @@ class Algorithm():
 			# iterates across each of the stoplight objects and determines how many squares are occupied around them
 			for obj in timeObjects:
 				if obj.type == "Stoplight": # maybe change this to an int for faster execution time?
-					# first looks at
-					print("ITERATION IN PROGRESS")
+					# first looks at each stoplight object and adds its ID to our array along with its sub-heuristic
+					res.append([obj.ID, self.calc_single_stoplight_heuristic(obj, stateIn)])
 
 			print("IN PROGRESS")
 		else:
 			print("INVALID HEURISTIC CODE")
 		return res
+
+	# calculates the heuristic of a single stoplight and returns it
+	def calc_single_stoplight_heuristic(self, stoplightObjIn, mapIn):
+		print("IN PROGRESS")
+		return 0
