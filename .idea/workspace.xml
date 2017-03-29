@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="b7509efa-e719-49e3-9194-6a90ff2ee606" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Algorithm.py" afterPath="$PROJECT_DIR$/Algorithm.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Main.py" afterPath="$PROJECT_DIR$/Main.py" />
     </list>
     <ignored path="EE554_Group_Project.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -27,8 +26,8 @@
       <file leaf-file-name="Algorithm.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Algorithm.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="2.2021277">
-              <caret line="69" column="0" selection-start-line="69" selection-start-column="0" selection-end-line="69" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.5425532">
+              <caret line="46" column="0" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
               <folding>
                 <element signature="e#16#27#0" expanded="true" />
               </folding>
@@ -66,6 +65,21 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="Stoplight.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Stoplight.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="136" column="51" selection-start-line="136" selection-start-column="51" selection-end-line="136" selection-end-column="51" />
+              <folding>
+                <element signature="e#78#96#0" expanded="true" />
+                <element signature="e#1835#4158#0" expanded="false" />
+                <element signature="e#10625#10841#0" expanded="false" />
+                <element signature="e#10872#11355#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
     </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
@@ -93,11 +107,11 @@
         <option value="$PROJECT_DIR$/map.txt" />
         <option value="$PROJECT_DIR$/Main_OLD.py" />
         <option value="$PROJECT_DIR$/Car.py" />
-        <option value="$PROJECT_DIR$/Stoplight.py" />
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/Road.py" />
-        <option value="$PROJECT_DIR$/Algorithm.py" />
         <option value="$PROJECT_DIR$/Main.py" />
+        <option value="$PROJECT_DIR$/Algorithm.py" />
+        <option value="$PROJECT_DIR$/Stoplight.py" />
       </list>
     </option>
   </component>
@@ -798,19 +812,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Stoplight.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.031914894">
-          <caret line="28" column="23" selection-start-line="28" selection-start-column="23" selection-end-line="28" selection-end-column="23" />
-          <folding>
-            <element signature="e#78#96#0" expanded="true" />
-            <element signature="e#1835#4158#0" expanded="false" />
-            <element signature="e#10625#10841#0" expanded="false" />
-            <element signature="e#10872#11355#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Road.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -835,6 +836,19 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Stoplight.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="136" column="51" selection-start-line="136" selection-start-column="51" selection-end-line="136" selection-end-column="51" />
+          <folding>
+            <element signature="e#78#96#0" expanded="true" />
+            <element signature="e#1835#4158#0" expanded="false" />
+            <element signature="e#10625#10841#0" expanded="false" />
+            <element signature="e#10872#11355#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Main.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -845,8 +859,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Algorithm.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="2.2021277">
-          <caret line="69" column="0" selection-start-line="69" selection-start-column="0" selection-end-line="69" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.5425532">
+          <caret line="46" column="0" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
           <folding>
             <element signature="e#16#27#0" expanded="true" />
           </folding>

@@ -33,9 +33,8 @@ class Algorithm():
 		curTime = time.time()
 		endTime = curTime + self.timeConstraintFloat
 
-		# first calculates the heuristic
-		heuristicArr = self.calc_heuristic(curState, sizeList, heuristicIn, timeObjects)
-
+		nextState = curState
+		nextState[1][1] = Road()
 		# how iterates across all the states and switches the stoplights on the fly
 
 		loopCounter = 0 # for debug
@@ -44,11 +43,18 @@ class Algorithm():
 			# print("LOOPING!")
 			loopCounter += 1
 
+			heuristicArr = self.calc_heuristic(nextState, sizeList, heuristicIn, timeObjects)
+
+			for obj in timeObjects:
+				if obj.type == "Stoplight":
+					print("DO SOMETHING")
+
 			# after the timer expires or a final result is reached, return the best next state
+			# SHOULD CHANGE THIS TO A THREAD THAT INTERRUPTS
 			if endTime <= time.time():
 				print("Reached time constraint ending. Exiting (returns next state)")
 				print("Loop count: " + str(loopCounter))
-				return curState # currently just sends back the same state
+				return nextState # currently just sends back the same state
 
 
 	# SUMMARY: Most important function - calculates the heuristic by simulating the next state
