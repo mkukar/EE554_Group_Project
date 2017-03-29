@@ -28,10 +28,15 @@ class Algorithm():
 	# SUMMARY: Calculates the next state using our core algorithm within the time requirement set in constructor
 	# ARGS: curState - current state map with cars
 	# RETURNS: nextState - map of same size as curState with new directions for the map
-	def calcNextState(self, curState, sizeList):
+	def calcNextState(self, curState, sizeList, heuristicIn, timeObjects):
 		# starts a timer from current datetime until curTime + timeConstraintFloat in seconds
 		curTime = time.time()
 		endTime = curTime + self.timeConstraintFloat
+
+		# first calculates the heuristic
+		heuristicArr = self.calc_heuristic(curState, sizeList, heuristicIn, timeObjects)
+
+		# how iterates across all the states and switches the stoplights on the fly
 
 		loopCounter = 0 # for debug
 		while(True):
@@ -107,9 +112,9 @@ class Algorithm():
 		for x in range(stoplightObjIn.xSize):
 			curX = x + stoplightObjIn.startIndex[0]
 			curY = stoplightObjIn.startIndex[1] - 1
-			print("CHECKING INDEX " + str(curX) + "," + str(curY))
-			if Constants.UP_DIR in mapIn[curX][curY].exitDirection:
-				print("ITERATING UPWARDS...")
+			#print("CHECKING INDEX " + str(curX) + "," + str(curY))
+			if Constants.DOWN_DIR in mapIn[curX][curY].exitDirection: # actually wants to see if roads are flowing INTO it
+				#print("ITERATING UPWARDS...")
 				while not mapIn[curX][curY].partOfIntersection and curY >= 0:
 					print(str(curX) + ',' + str(curY))
 					topTotal += 1
@@ -130,9 +135,9 @@ class Algorithm():
 		for x in range(stoplightObjIn.xSize):
 			curX = x + stoplightObjIn.startIndex[0]
 			curY = stoplightObjIn.startIndex[1] + stoplightObjIn.ySize
-			print("CHECKING INDEX " + str(curX) + "," + str(curY))
-			if Constants.DOWN_DIR in mapIn[curX][curY].exitDirection:
-				print("ITERATING DOWNWARDS...")
+			#print("CHECKING INDEX " + str(curX) + "," + str(curY))
+			if Constants.UP_DIR in mapIn[curX][curY].exitDirection:
+				#print("ITERATING DOWNWARDS...")
 				while not mapIn[curX][curY].partOfIntersection and curY < (int(sizeList[1]) - 1):
 					print(str(curX) + ',' + str(curY))
 					bottomTotal += 1
@@ -151,9 +156,9 @@ class Algorithm():
 		for y in range(stoplightObjIn.ySize):
 			curX = stoplightObjIn.startIndex[0] - 1
 			curY = y + stoplightObjIn.startIndex[1]
-			print("CHECKING INDEX " + str(curX) + "," + str(curY))
-			if Constants.LEFT_DIR in mapIn[curX][curY].exitDirection:
-				print("ITERATING LEFTWARDS...")
+			#print("CHECKING INDEX " + str(curX) + "," + str(curY))
+			if Constants.RIGHT_DIR in mapIn[curX][curY].exitDirection:
+				#print("ITERATING LEFTWARDS...")
 				while not mapIn[curX][curY].partOfIntersection and curX >= 0:
 					print(str(curX) + ',' + str(curY))
 					leftTotal += 1
@@ -172,9 +177,9 @@ class Algorithm():
 		for y in range(stoplightObjIn.ySize):
 			curX = stoplightObjIn.startIndex[0] + stoplightObjIn.xSize
 			curY = y + stoplightObjIn.startIndex[1]
-			print("CHECKING INDEX " + str(curX) + "," + str(curY))
+			#print("CHECKING INDEX " + str(curX) + "," + str(curY))
 			if Constants.LEFT_DIR in mapIn[curX][curY].exitDirection:
-				print("ITERATING RIGHTWARDS...")
+				#print("ITERATING RIGHTWARDS...")
 				while not mapIn[curX][curY].partOfIntersection and curX < (int(sizeList[0]) - 1):
 					print(str(curX) + ',' + str(curY))
 					rightTotal += 1

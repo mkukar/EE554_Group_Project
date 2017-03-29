@@ -15,8 +15,9 @@ import random
 # global variables
 # #
 
-simTime = 100
+simTime = 25
 timeConstraint = 0.33
+heuristicToUse = 2
 
 mapFileName = "map.txt"
 sizeList = []
@@ -249,10 +250,9 @@ def main():
 		#print("CAR SPAWN IP")
 
 		# takes a snapshot of the current state and runs the algorithm on it (REAL TIME CONSTRAINED)
-		map = algo.calcNextState(map, sizeList)
+		map = algo.calcNextState(map, sizeList, heuristicToUse, timeObjects)
 
 		# TESTING HEURISTIC ONLY
-		heuristicToUse = 2
 		print(algo.calc_heuristic(map, sizeList, heuristicToUse, timeObjects))
 
 		for obj in timeObjects:
