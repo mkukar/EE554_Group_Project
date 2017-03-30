@@ -1,6 +1,6 @@
 # Algorithm.py
 
-import time
+import time, threading
 
 from Road import *
 import Constants
@@ -30,6 +30,7 @@ class Algorithm():
 	# RETURNS: nextState - map of same size as curState with new directions for the map
 	def calcNextState(self, curState, sizeList, heuristicIn, timeObjects):
 		# starts a timer from current datetime until curTime + timeConstraintFloat in seconds
+
 		curTime = time.time()
 		endTime = curTime + self.timeConstraintFloat
 
@@ -43,11 +44,12 @@ class Algorithm():
 			# print("LOOPING!")
 			loopCounter += 1
 
-			heuristicArr = self.calc_heuristic(nextState, sizeList, heuristicIn, timeObjects)
+			#heuristicArr = self.calc_heuristic(nextState, sizeList, heuristicIn, timeObjects)
 
 			for obj in timeObjects:
 				if obj.type == "Stoplight":
-					print("DO SOMETHING")
+					#print("DO SOMETHING")
+					pass
 
 			# after the timer expires or a final result is reached, return the best next state
 			# SHOULD CHANGE THIS TO A THREAD THAT INTERRUPTS
@@ -56,6 +58,10 @@ class Algorithm():
 				print("Loop count: " + str(loopCounter))
 				return nextState # currently just sends back the same state
 
+
+	def finishCalcNextState(self, nextState):
+		print("THREAD FINISHED! DO SOMETHING")
+		return nextState
 
 	# SUMMARY: Most important function - calculates the heuristic by simulating the next state
 	# ARGS: stateIn - map state in to calculate its heuristic value (how good is it)
