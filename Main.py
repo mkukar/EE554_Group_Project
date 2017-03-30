@@ -15,6 +15,11 @@ import random
 # global variables
 # #
 
+pSpawnNorth = 1
+pSpawnSouth = 0
+pSpawnWest = 0
+pSpawnEast = 0
+
 simTime = 25
 timeConstraint = 0.33
 heuristicToUse = 2
@@ -22,7 +27,10 @@ heuristicToUse = 2
 mapFileName = "map.txt"
 sizeList = []
 timeObjects = []
-validStartIndexes = []
+validStartIndexesNorth = []
+validStartIndexesSouth = []
+validStartIndexesWest = []
+validStartIndexesEast = []
 counter = 0
 map = [[Road() for i in range(2)] for j in range(2)] # an array of roads
 
@@ -76,22 +84,22 @@ def readMap():
 			# find all valid starting locations on the North side of the map
 			for index in range(int(sizeList[0])):
 				if (map[index][0].exitDirection == [Constants.DOWN_DIR]):
-					validStartIndexes.append([index,0])
+					validStartIndexesNorth.append([index,0])
 		if (side == 1):
 			# find all valid starting locations on the South side of the map
 			for index in range(int(sizeList[0])):
 				if (map[index][int(sizeList[1]) - 1].exitDirection == [Constants.UP_DIR]):
-					validStartIndexes.append([index,int(sizeList[1]) - 1])
+					validStartIndexesSouth.append([index,int(sizeList[1]) - 1])
 		if (side == 2):
 			# find all valid starting locations on the West side of the map
 			for index in range(int(sizeList[1])):
 				if (map[0][index].exitDirection == [Constants.RIGHT_DIR]):
-					validStartIndexes.append([0,index])
+					validStartIndexesWest.append([0,index])
 		if (side == 3):
 			# find all valid starting locations on the East side of the map
 			for index in range(int(sizeList[1])):
 				if (map[int(sizeList[0]) - 1][index].exitDirection == [Constants.LEFT_DIR]):
-					validStartIndexes.append([int(sizeList[0]) - 1,index])
+					validStartIndexesEast.append([int(sizeList[0]) - 1,index])
 
 
 	for y in range(int(sizeList[1])):
@@ -166,12 +174,31 @@ def spawnCar(carID):
 	global map
 	global timeObjects
 	global totalCars
-	global validStartIndexes
+	global validStartIndexesNorth
+	global validStartIndexesSouth
+	global validStartIndexesWest
+	global validStartIndexesEast
 
 	totalCars = totalCars + 1
+	tempSpawnSide = random.uniform(0,1)
 
-	tempindexVal = random.randint(0,len(validStartIndexes) - 1)
-	tempStartLoc = validStartIndexes[tempindexVal]
+	if tempSpawnSide >= 0 and tempSpawnSide < pSpawnNorth:
+		# Spawn on North Side
+		tempindexVal = random.randint(0,len(validStartIndexesNorth) - 1)
+		tempStartLoc = validStartIndexesNorth[tempindexVal]
+	elif tempSpawnSide >= pSpawnNorth and tempSpawnSide < (pSpawnNorth + pSpawnSouth):
+		# Spawn on South Side
+		tempindexVal = random.randint(0,len(validStartIndexesSouth) - 1)
+		tempStartLoc = validStartIndexesSouth[tempindexVal]
+	elif tempSpawnSide >= (pSpawnNorth + pSpawnSouth) and tempSpawnSide < (pSpawnNorth + pSpawnSouth + pSpawnWest):
+		# Spawn on West Side
+		tempindexVal = random.randint(0,len(validStartIndexesWest) - 1)
+		tempStartLoc = validStartIndexesWest[tempindexVal]
+	elif tempSpawnSide >= (pSpawnNorth + pSpawnSouth + pSpawnWest) and tempSpawnSide <= 1:
+		# Spawn on East side
+		tempindexVal = random.randint(0,len(validStartIndexesEast) - 1)
+		tempStartLoc = validStartIndexesEast[tempindexVal]
+	
 	
 	# calculate the end location and route of the new car
 	if Constants.UP_DIR in map[tempStartLoc[0]][tempStartLoc[1]].exitDirection:
