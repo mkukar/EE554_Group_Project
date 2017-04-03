@@ -49,6 +49,9 @@ class Stoplight(TimeObject):
     type = "Stoplight"
     subMap = [[]]
 
+    nextState = 0 # keeps track of next state
+    nextStateJustSet = False
+
     # #
     # Functions
     # #
@@ -216,13 +219,20 @@ class Stoplight(TimeObject):
 
     def changeState(self):
         # print("CHANGING STATE...")
-        self.curStateIndex = self.curStateIndex + 1
+        '''
+        #OLD METHOD - TIMER BASED
+        if (self.nextState == self.curStateIndex): # if next state is the same as the current state, just force change
+            self.curStateIndex = self.curStateIndex + 1
         if self.curStateIndex >= len(self.states):
             self.curStateIndex = 0
+        '''
+        # just writes the next state out
+        self.nextStateJustSet = False
+        self.writeStateToMap(self.nextState)
 
-        self.writeStateToMap(self.curStateIndex)
 
-
+    '''
+    # OLD TICK METHOD
     def tick(self):
         self.timer = self.timer + 1
         if self.timer >= self.timerMax:
@@ -235,6 +245,38 @@ class Stoplight(TimeObject):
                 # now changes state and starts the next one
                 self.changeState()
                 self.timer = 0
+    '''
+
+    # algoModeEnabled means we use the algorithm to determine enxt state, not the timer
+    def tick(self, algoModeEnabled):
+        if algoModeEnabled:
+            #print("IN TICK FOR ALGO")
+            if self.nextStateJustSet:
+                if self.yellowTimer <= self.yellowTimerMax:
+                    self.yellow_light()
+                else:
+                    self.yellowTimer = 0
+                    self.changeState()
+                    #print("Got here")
+        else:
+            self.timer = self.timer + 1
+            if self.timer >= self.timerMax:
+                if (self.yellowTimer <= self.yellowTimerMax):
+                    # print("Yellow light")
+                    self.yellow_light()
+                else:
+                    self.yellowTimer = 0
+                    if self.curStateIndex + 1 >= len(self.states):
+                        self.setNextState(0)
+                    else:
+                        self.setNextState(self.curStateIndex + 1)
+                    self.changeState()
+
+
+    def setNextState(self, nextStateIndex):
+        # note - when called it starts the yellow light timer
+        self.nextState = nextStateIndex
+        self.nextStateJustSet = True
 
 
     def writeStateToMap(self, stateIndex):
@@ -249,10 +291,10 @@ class Stoplight(TimeObject):
                 stateOccupied = False
                 if self.map[x + self.startIndex[0]][y + self.startIndex[1]].isOccupied:
                     stateOccupied = True
-                    print("IS OCCUPIED Stoplight.py L246")
+                    #print("IS OCCUPIED Stoplight.py L246")
 
                 # now copies over the index
                 self.map[x + self.startIndex[0]][y + self.startIndex[1]].exitDirection = roadsToWrite[x][y].exitDirection
                 #self.map[x + self.startIndex[0]][y + self.startIndex[1]].isOccupied = stateOccupied
-                if stateOccupied:
-                    print("WROTE SOMETHING OCCUPIED Stoplight.py L249")
+                #if stateOccupied:
+                    #print("WROTE SOMETHING OCCUPIED Stoplight.py L249")

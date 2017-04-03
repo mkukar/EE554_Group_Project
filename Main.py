@@ -15,12 +15,12 @@ import random
 # global variables
 # #
 
-pSpawnNorth = 1
-pSpawnSouth = 0
-pSpawnWest = 0
-pSpawnEast = 0
+pSpawnNorth = 0.5
+pSpawnSouth = 0.1
+pSpawnWest = 0.2
+pSpawnEast = 0.2
 
-simTime = 25
+simTime = 50
 timeConstraint = 0.33
 heuristicToUse = 2
 
@@ -280,13 +280,13 @@ def main():
 		map = algo.calcNextState(map, sizeList, heuristicToUse, timeObjects)
 
 		# TESTING HEURISTIC ONLY
-		print(algo.calc_heuristic(map, sizeList, heuristicToUse, timeObjects))
+		# print(algo.calc_heuristic(map, sizeList, heuristicToUse, timeObjects))
 
 		for obj in timeObjects:
 			if obj.type == "Car":
 				obj.setNextLocation()
-			#elif obj.type == "Stoplight":
-		#		obj.tick()
+			elif obj.type == "Stoplight":
+				obj.tick(True) # TRUE to use algorithm mode
 		for obj in timeObjects:
 			if obj.type == "Car":
 				res = obj.moveCar()
@@ -300,6 +300,14 @@ def main():
 
 	print "Simulation Complete\n"
 	printMap()
+
+	print("AVERAGE CAR LIFESPAN: ")
+	if carsArrived > 0:
+		print(averageLifespan/carsArrived)
+	else:
+		print("0")
+	print("CARS ARRIVED / CARS SPAWNED: ")
+	print(float(carsArrived) / totalCars)
 
 
 if __name__ == "__main__":

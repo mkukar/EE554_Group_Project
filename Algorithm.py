@@ -44,12 +44,25 @@ class Algorithm():
 			# print("LOOPING!")
 			loopCounter += 1
 
-			#heuristicArr = self.calc_heuristic(nextState, sizeList, heuristicIn, timeObjects)
+			heuristicArr = self.calc_heuristic(nextState, sizeList, heuristicIn, timeObjects)
 
 			for obj in timeObjects:
 				if obj.type == "Stoplight":
-					#print("DO SOMETHING")
-					pass
+					if obj.ID in heuristicArr:
+						# sums LEFT RIGHT traffic and see if it is greater than UP DOWN. If yes, change state to LR
+						curHeuristic = heuristicArr[obj.ID]
+						# [L, R, U, D]
+						if (curHeuristic[0] + curHeuristic[1]) > (curHeuristic[2] + curHeuristic[3]):
+							#print("GO TO LR STATE")
+							# state 1 is UP DOWN STATE (NOTE - relies on valid UP DOWN and LR states)
+							obj.setNextState(1)
+						elif (curHeuristic[0] + curHeuristic[1]) < (curHeuristic[2] + curHeuristic[3]):
+							#print("GO TO UP DOWN STATE")
+							# state 0 is UP DOWN STATE (NOTE - Relies on stoplight having a valid up/down state)
+							obj.setNextState(0)
+						else:
+							#print("Does nothing since traffic is even.")
+							pass
 
 			# after the timer expires or a final result is reached, return the best next state
 			# SHOULD CHANGE THIS TO A THREAD THAT INTERRUPTS
@@ -72,7 +85,7 @@ class Algorithm():
 	#
 
 	def calc_heuristic(self, stateIn, sizeList, heuristicIn, timeObjects):
-		res = []
+		res = {} # should actually now be a map that has a key of the stoplight ID and the value of the heuristic
 		if heuristicIn == 1:
 			# iterates across the state and counts how many squares that are <- or -> are occupied, then ^ down occupation)
 			totalLeftRight = 0
@@ -91,20 +104,21 @@ class Algorithm():
 						if stateIn[x][y].isOccupied == True:
 							occupiedLeftRight += 1
 
-			res = [float(occupiedLeftRight)/totalLeftRight, float(occupiedUpDown)/totalUpDown]
+			res['All'] = [float(occupiedLeftRight)/totalLeftRight, float(occupiedUpDown)/totalUpDown]
 		elif heuristicIn == 2:
 			# iterates across each of the stoplight objects and determines how many squares are occupied around them
 			for obj in timeObjects:
 				if obj.type == "Stoplight": # maybe change this to an int for faster execution time?
 					# first looks at each stoplight object and adds its ID to our array along with its sub-heuristic
-					res.append([obj.ID, self.calc_single_stoplight_heuristic(obj, stateIn, sizeList)])
+					res[obj.ID] = self.calc_single_stoplight_heuristic(obj, stateIn, sizeList)
 
-			print("IN PROGRESS")
+			#print("IN PROGRESS")
 		else:
 			print("INVALID HEURISTIC CODE. TRY USING 1 or 2")
 		return res
 
 	# calculates the heuristic of a single stoplight and returns it
+	# [L, R, U, D]
 	def calc_single_stoplight_heuristic(self, stoplightObjIn, mapIn, sizeList):
 		# iterates starting at the stoplight object in each direction on the map until it hits another stoplight or
 		# the end of the map
@@ -128,7 +142,7 @@ class Algorithm():
 			if Constants.DOWN_DIR in mapIn[curX][curY].exitDirection: # actually wants to see if roads are flowing INTO it
 				#print("ITERATING UPWARDS...")
 				while not mapIn[curX][curY].partOfIntersection and curY >= 0:
-					print(str(curX) + ',' + str(curY))
+					#print(str(curX) + ',' + str(curY))
 					topTotal += 1
 					if mapIn[curX][curY].isOccupied:
 						topOccupied += 1
@@ -151,7 +165,7 @@ class Algorithm():
 			if Constants.UP_DIR in mapIn[curX][curY].exitDirection:
 				#print("ITERATING DOWNWARDS...")
 				while not mapIn[curX][curY].partOfIntersection and curY < (int(sizeList[1]) - 1):
-					print(str(curX) + ',' + str(curY))
+					#print(str(curX) + ',' + str(curY))
 					bottomTotal += 1
 					if mapIn[curX][curY].isOccupied:
 						bottomOccupied += 1
@@ -172,7 +186,7 @@ class Algorithm():
 			if Constants.RIGHT_DIR in mapIn[curX][curY].exitDirection:
 				#print("ITERATING LEFTWARDS...")
 				while not mapIn[curX][curY].partOfIntersection and curX >= 0:
-					print(str(curX) + ',' + str(curY))
+					#print(str(curX) + ',' + str(curY))
 					leftTotal += 1
 					if mapIn[curX][curY].isOccupied:
 						leftOccupied += 1
@@ -193,7 +207,7 @@ class Algorithm():
 			if Constants.LEFT_DIR in mapIn[curX][curY].exitDirection:
 				#print("ITERATING RIGHTWARDS...")
 				while not mapIn[curX][curY].partOfIntersection and curX < (int(sizeList[0]) - 1):
-					print(str(curX) + ',' + str(curY))
+					#print(str(curX) + ',' + str(curY))
 					rightTotal += 1
 					if mapIn[curX][curY].isOccupied:
 						rightOccupied += 1
