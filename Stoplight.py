@@ -95,7 +95,12 @@ class Stoplight(TimeObject):
             # goes back to self.subMap
             for y in range(self.ySize + 2):
                 for x in range(self.xSize + 2):
+                    # should only reset the borders though, not the internal parts to prevent cars from quickly entering the intersection)
                     self.map[self.startIndex[0] - 1 + x][self.startIndex[1] - 1 + y].exitDirection = self.subMap[x][y].exitDirection
+                    # actually set inside of intersection to NO_DIR for this last clock
+            for y in range(self.ySize):
+                for x in range(self.xSize):
+                    self.map[self.startIndex[0] + x][self.startIndex[1] + y].exitDirection = [Constants.NO_DIR]
 
         self.yellowTimer += 1
 
@@ -105,9 +110,9 @@ class Stoplight(TimeObject):
 
         # Sets the size of the yellow light timer
         if self.ySize > self.xSize:
-            self.yellowTimerMax = self.ySize
+            self.yellowTimerMax = self.ySize + 1
         else:
-            self.yellowTimerMax = self.xSize
+            self.yellowTimerMax = self.xSize + 1
 
         # ALGORITHM SUMMARY
 
@@ -267,9 +272,12 @@ class Stoplight(TimeObject):
                 else:
                     self.yellowTimer = 0
                     if self.curStateIndex + 1 >= len(self.states):
-                        self.setNextState(0)
+                        self.curStateIndex = 0
+                        self.setNextState(self.curStateIndex)
+
                     else:
-                        self.setNextState(self.curStateIndex + 1)
+                        self.curStateIndex += 1
+                        self.setNextState(self.curStateIndex)
                     self.changeState()
 
 

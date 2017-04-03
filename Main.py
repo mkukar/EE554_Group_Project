@@ -15,14 +15,16 @@ import random
 # global variables
 # #
 
-pSpawnNorth = 0.5
-pSpawnSouth = 0.1
+pSpawnNorth = 0.4
+pSpawnSouth = 0.4
 pSpawnWest = 0.2
 pSpawnEast = 0.2
 
-simTime = 50
+simTime = 100
 timeConstraint = 0.33
 heuristicToUse = 2
+
+algoModeOn = True # turn to FALSE to use normal timer mode
 
 mapFileName = "map.txt"
 sizeList = []
@@ -286,7 +288,7 @@ def main():
 			if obj.type == "Car":
 				obj.setNextLocation()
 			elif obj.type == "Stoplight":
-				obj.tick(True) # TRUE to use algorithm mode
+				obj.tick(algoModeOn) # TRUE to use algorithm mode
 		for obj in timeObjects:
 			if obj.type == "Car":
 				res = obj.moveCar()
