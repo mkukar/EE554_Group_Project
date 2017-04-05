@@ -234,7 +234,7 @@ class Stoplight(TimeObject):
         # just writes the next state out
         self.nextStateJustSet = False
         self.writeStateToMap(self.nextState)
-        #self.curStateIndex = self.nextState
+        self.curStateIndex = self.nextState
 
 
     '''
@@ -287,9 +287,11 @@ class Stoplight(TimeObject):
 
 
     def setNextState(self, nextStateIndex):
-        # note - when called it starts the yellow light timer
-        self.nextState = nextStateIndex
-        self.nextStateJustSet = True
+        # CHECKS HERE TO MAKE SURE NEXT STATE IS DIFFERENT THAN CURRENT STATE
+        if nextStateIndex != self.curStateIndex:
+            # note - when called it starts the yellow light timer
+            self.nextState = nextStateIndex
+            self.nextStateJustSet = True
 
 
     def writeStateToMap(self, stateIndex):

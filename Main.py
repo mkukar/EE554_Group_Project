@@ -20,11 +20,16 @@ pSpawnSouth = 0.1
 pSpawnWest = 0.4
 pSpawnEast = 0.4
 
-simTime = 100
+
+maxCarCounter = 100
+totalCars = 0
+carsDespawnCounter = 0
+carsSpawnCounter = 0
+simTimeCounter = 0
 timeConstraint = 0.33
 heuristicToUse = 2
 
-carsPerSec = 10
+carsPerSec = 2
 
 algoModeOn = False # turn to FALSE to use normal timer mode
 
@@ -162,7 +167,7 @@ def printMap():
 
 
 # call this to spawn a car randomly
-def spawnCar(carID):
+def spawnCar(carID, counterIn):
 	'''
 	# OLD METHOD - requires input startLoc, endLoc, carID, and direction
 	global map
@@ -226,9 +231,12 @@ def spawnCar(carID):
 		map[tempStartLoc[0]][tempStartLoc[1]].isOccupied = True
 		#print("SETTING LOCATION TO OCCUPIED AT " + str(tempStartLoc[0]) + ',' + str(tempStartLoc[1]))
 		timeObjects.append(Car(tempStartLoc,tempEndLoc, carID, tempRoute, map))
+		counterIn += 1
+
 
 	# randomly spawn here
 
+	return counterIn
 
 # Main
 
@@ -237,6 +245,10 @@ def main():
 	global averageLifespan
 	global carsArrived
 	global map
+	global simTimeCounter
+	global carsDespawnCounter
+	global totalCars
+	global carsSpawnCounter
 
 	print "Initializing map...\n"
 
@@ -251,11 +263,18 @@ def main():
 
 	print "Simulation Start\n"
 
-	for x in range(simTime): # sim time is how many times to run a simulation tick (1 car length)
+	print(carsDespawnCounter)
+	print(totalCars)
 
-		# randomly spawns new cars
+	while(carsDespawnCounter < maxCarCounter): # sim time is how many times to run a simulation tick (1 car length)
+
+		print("CAR DESPAWN COUNTER: " + str(carsDespawnCounter))
+		simTimeCounter += 1
+
+		# randomly spawns new cars until carSpawnCounter == totalCars
 		for y in range(carsPerSec):
-			spawnCar(x + (y*carsPerSec))
+			if carsSpawnCounter < maxCarCounter:
+				carsSpawnCounter = spawnCar(simTimeCounter + (y*carsPerSec), carsSpawnCounter)
 		printMap()
 
 		# takes a snapshot of the current state and runs the algorithm on it (REAL TIME CONSTRAINED)
@@ -270,9 +289,10 @@ def main():
 			if obj.type == "Car":
 				res = obj.moveCar()
 				if res is True:
+					carsDespawnCounter += 1
 					map[obj.currentLoc[0]][obj.currentLoc[1]].isOccupied = False
 
-					print("CAR DESPAWNED. WAS ALIVE FOR " + str(obj.timeAlive))
+					#print("CAR DESPAWNED. WAS ALIVE FOR " + str(obj.timeAlive))
 					averageLifespan += obj.timeAlive
 					carsArrived += 1
 					timeObjects.remove(obj)
@@ -285,8 +305,7 @@ def main():
 		print(averageLifespan/carsArrived)
 	else:
 		print("0")
-	print("CARS ARRIVED / CARS SPAWNED: ")
-	print(float(carsArrived) / totalCars)
+	print("CARS ARRIVED: " + str(carsDespawnCounter))
 
 
 if __name__ == "__main__":
