@@ -15,16 +15,18 @@ import random
 # global variables
 # #
 
-pSpawnNorth = 0.4
-pSpawnSouth = 0.4
-pSpawnWest = 0.2
-pSpawnEast = 0.2
+pSpawnNorth = 0.1
+pSpawnSouth = 0.1
+pSpawnWest = 0.4
+pSpawnEast = 0.4
 
 simTime = 100
 timeConstraint = 0.33
 heuristicToUse = 2
 
-algoModeOn = True # turn to FALSE to use normal timer mode
+carsPerSec = 10
+
+algoModeOn = False # turn to FALSE to use normal timer mode
 
 mapFileName = "map.txt"
 sizeList = []
@@ -247,42 +249,17 @@ def main():
 
 	print "Initialization complete.\n"
 
-	# print "Number of valid start indexes: ", len(validStartIndexes)
-	# for x in range(len(validStartIndexes)):
-	# 	print validStartIndexes[x]
-
-	'''
-	print "DEBUGGING STOPLIGHTS FIRST"
-	counter = 0
-	carCounter = 0
-	for obj in timeObjects:
-		if obj.type == "Stoplight":
-			print "STOPLIGHT DETECTED WITH COORDINATES " + str(obj.startIndex)
-			counter += 1
-		elif obj.time == "Car":
-			carCounter += 1
-	print("TOTAL STOPLIGHTS: " + str(counter))
-	print("TOTAL CARS: " + str(carCounter))
-
-	print("CHANGING ONE ROAD IN A SINGLE STOPLIGHT...")
-	map[3][3].exitDirection = [Constants.LEFT_DIR]
-	print("THIS SHOULD ONLY CHANGE ONE OF THE INTERSECTIONS")
-	'''
-
 	print "Simulation Start\n"
 
 	for x in range(simTime): # sim time is how many times to run a simulation tick (1 car length)
 
 		# randomly spawns new cars
-		spawnCar(x)
+		for y in range(carsPerSec):
+			spawnCar(x + (y*carsPerSec))
 		printMap()
-		#print("CAR SPAWN IP")
 
 		# takes a snapshot of the current state and runs the algorithm on it (REAL TIME CONSTRAINED)
 		map = algo.calcNextState(map, sizeList, heuristicToUse, timeObjects)
-
-		# TESTING HEURISTIC ONLY
-		# print(algo.calc_heuristic(map, sizeList, heuristicToUse, timeObjects))
 
 		for obj in timeObjects:
 			if obj.type == "Car":

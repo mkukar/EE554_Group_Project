@@ -234,6 +234,7 @@ class Stoplight(TimeObject):
         # just writes the next state out
         self.nextStateJustSet = False
         self.writeStateToMap(self.nextState)
+        #self.curStateIndex = self.nextState
 
 
     '''
@@ -256,13 +257,17 @@ class Stoplight(TimeObject):
     def tick(self, algoModeEnabled):
         if algoModeEnabled:
             #print("IN TICK FOR ALGO")
-            if self.nextStateJustSet:
+            if self.nextStateJustSet: # bug here - if next state is the same as current state, don't need yellow light
                 if self.yellowTimer <= self.yellowTimerMax:
                     self.yellow_light()
                 else:
                     self.yellowTimer = 0
                     self.changeState()
+                    self.curStateIndex = self.nextState
                     #print("Got here")
+            #else:
+            #    self.changeState()
+            #    self.curStateIndex = self.nextState
         else:
             self.timer = self.timer + 1
             if self.timer >= self.timerMax:

@@ -28,7 +28,7 @@ class Road:
 			xLoc = location[0]
 			yLoc = location[1]
 		else:
-			print "You fucked up in Road.py Constructor"
+			print "You did something wrong up in Road.py Constructor"
 
 	# #
 	# Variables
