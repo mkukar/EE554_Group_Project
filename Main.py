@@ -10,6 +10,7 @@ from TimeObject import *
 import Constants
 from Algorithm import *
 import random
+import threading
 
 # #
 # global variables
@@ -21,7 +22,7 @@ pSpawnWest = 0.4
 pSpawnEast = 0.4
 
 
-maxCarCounter = 100
+maxCarCounter = 10
 totalCars = 0
 carsDespawnCounter = 0
 carsSpawnCounter = 0
@@ -31,7 +32,7 @@ heuristicToUse = 2
 
 carsPerSec = 2
 
-algoModeOn = False # turn to FALSE to use normal timer mode
+algoModeOn = True # turn to FALSE to use normal timer mode
 
 mapFileName = "map.txt"
 sizeList = []
@@ -48,6 +49,8 @@ carsArrived = 0
 totalCars = 0
 
 stoplight_ID_counter = 0
+
+timerFinishedBool = False
 
 # #
 # functions
@@ -238,6 +241,11 @@ def spawnCar(carID, counterIn):
 
 	return counterIn
 
+def timerFinished():
+	global timerFinishedBool
+	timerFinishedBool = True
+	print("TIMER FINISHED")
+
 # Main
 
 def main():
@@ -249,6 +257,7 @@ def main():
 	global carsDespawnCounter
 	global totalCars
 	global carsSpawnCounter
+	global timerFinishedBool
 
 	print "Initializing map...\n"
 
@@ -277,7 +286,6 @@ def main():
 				carsSpawnCounter = spawnCar(simTimeCounter + (y*carsPerSec), carsSpawnCounter)
 		printMap()
 
-		# takes a snapshot of the current state and runs the algorithm on it (REAL TIME CONSTRAINED)
 		map = algo.calcNextState(map, sizeList, heuristicToUse, timeObjects)
 
 		for obj in timeObjects:
@@ -310,3 +318,5 @@ def main():
 
 if __name__ == "__main__":
 	main()
+
+

@@ -21,6 +21,8 @@ class Algorithm():
 
 	timeConstraintFloat = 0.33
 
+	timerFinished = False # changes to True when timer is called
+
 	# #
 	# Functions
 	# #
@@ -29,6 +31,59 @@ class Algorithm():
 	# ARGS: curState - current state map with cars
 	# RETURNS: nextState - map of same size as curState with new directions for the map
 	def calcNextState(self, curState, sizeList, heuristicIn, timeObjects):
+
+
+		# IN PROGRESS
+		# new algorithm design - starts a timer thread and then evaluates algorithm
+		# if the timer thread is called before the algorithm is executed, just return the same state (no change)
+		# if the thread ending is not reached, then we return our own heuristic
+		timer = threading.Timer(self.timeConstraintFloat, self.finishCalcNextState)
+		self.timerFinished = False
+		timer.start()
+
+		nextState = curState
+		nextState[1][1] = Road()
+		# right now just does a single loop since we don't care to do more than that
+		heuristicArr = self.calc_heuristic(nextState, sizeList, heuristicIn, timeObjects)
+
+		while not self.timerFinished:
+			for obj in timeObjects:
+				# print("TIMER IS CURRENTLY: " + str(self.timerFinished))
+				if not self.timerFinished:
+					if obj.type == "Stoplight":
+						if obj.ID in heuristicArr:
+							# sums LEFT RIGHT traffic and see if it is greater than UP DOWN. If yes, change state to LR
+							curHeuristic = heuristicArr[obj.ID]
+							# [L, R, U, D]
+							if (curHeuristic[0] + curHeuristic[1]) > (curHeuristic[2] + curHeuristic[3]):
+								#print("GO TO LR STATE")
+								# state 1 is UP DOWN STATE (NOTE - relies on valid UP DOWN and LR states)
+								obj.setNextState(1)
+							elif (curHeuristic[0] + curHeuristic[1]) < (curHeuristic[2] + curHeuristic[3]):
+								#print("GO TO UP DOWN STATE")
+								# state 0 is UP DOWN STATE (NOTE - Relies on stoplight having a valid up/down state)
+								obj.setNextState(0)
+							else:
+								#print("Does nothing since traffic is even.")
+								pass
+				else:
+					timer.join()
+					return curState
+
+			# if it makes it this far, cancel timer and then just return the next state
+			#timer.cancel()
+			timer.join()
+			return curState
+
+		timer.cancel()
+		timer.join()
+
+		return curState # if we time out, we end up here
+
+
+		'''
+
+		# ORIGINAL METHOD (NOT REAL TIME)
 		# starts a timer from current datetime until curTime + timeConstraintFloat in seconds
 
 		curTime = time.time()
@@ -71,10 +126,12 @@ class Algorithm():
 				print("Loop count: " + str(loopCounter))
 				return nextState # currently just sends back the same state
 
+		'''
 
-	def finishCalcNextState(self, nextState):
-		print("THREAD FINISHED! DO SOMETHING")
-		return nextState
+	def finishCalcNextState(self):
+		print("ALGORITHM TIMED OUT! Should just keep original state intact.")
+		self.timerFinished = True
+		print(self.timerFinished)
 
 	# SUMMARY: Most important function - calculates the heuristic by simulating the next state
 	# ARGS: stateIn - map state in to calculate its heuristic value (how good is it)
