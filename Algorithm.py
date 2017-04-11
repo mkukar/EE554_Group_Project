@@ -32,8 +32,6 @@ class Algorithm():
 	# RETURNS: nextState - map of same size as curState with new directions for the map
 	def calcNextState(self, curState, sizeList, heuristicIn, timeObjects):
 
-
-		# IN PROGRESS
 		# new algorithm design - starts a timer thread and then evaluates algorithm
 		# if the timer thread is called before the algorithm is executed, just return the same state (no change)
 		# if the thread ending is not reached, then we return our own heuristic
@@ -129,7 +127,7 @@ class Algorithm():
 		'''
 
 	def finishCalcNextState(self):
-		print("ALGORITHM TIMED OUT! Should just keep original state intact.")
+		# print("ALGORITHM TIMED OUT! Should just keep original state intact.")
 		self.timerFinished = True
 		print(self.timerFinished)
 

@@ -10,19 +10,18 @@ from TimeObject import *
 import Constants
 from Algorithm import *
 import random
-import threading
 
 # #
 # global variables
 # #
 
-pSpawnNorth = 0.1
-pSpawnSouth = 0.1
-pSpawnWest = 0.4
-pSpawnEast = 0.4
+pSpawnNorth = 0.25
+pSpawnSouth = 0.25
+pSpawnWest = 0.25
+pSpawnEast = 0.25
 
 
-maxCarCounter = 10
+maxCarCounter = 100
 totalCars = 0
 carsDespawnCounter = 0
 carsSpawnCounter = 0
@@ -30,7 +29,7 @@ simTimeCounter = 0
 timeConstraint = 0.33
 heuristicToUse = 2
 
-carsPerSec = 2
+carsPerSec = 10
 
 algoModeOn = True # turn to FALSE to use normal timer mode
 
@@ -263,6 +262,10 @@ def main():
 
 	readMap()
 	printMap()
+
+	print("MAP INFO:")
+	print("X SIZE: " + str(len(map)))
+	print("Y SIZE: " + str(len(map[:])))
 
 	print "Initializing algorithm...\n"
 	# initialize algorithm class here
