@@ -129,7 +129,7 @@ class Algorithm():
 	def finishCalcNextState(self):
 		# print("ALGORITHM TIMED OUT! Should just keep original state intact.")
 		self.timerFinished = True
-		print(self.timerFinished)
+		# print(self.timerFinished)
 
 	# SUMMARY: Most important function - calculates the heuristic by simulating the next state
 	# ARGS: stateIn - map state in to calculate its heuristic value (how good is it)

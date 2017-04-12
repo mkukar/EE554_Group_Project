@@ -126,6 +126,22 @@ class Car(TimeObject):
 
 	def setNextLocation(self):
 
+		# allows cars to exit intersections no matter what
+		if self.map[self.currentLoc[0]][self.currentLoc[1]].partOfIntersection:
+			if self.route[0] == Constants.UP_DIR:
+				if self.map[self.currentLoc[0]][self.currentLoc[1] - 1].isOccupied == False:
+					self.nextLoc = [self.currentLoc[0], self.currentLoc[1] - 1]
+			elif self.route[0] == Constants.DOWN_DIR:
+				if self.map[self.currentLoc[0]][self.currentLoc[1] + 1].isOccupied == False:
+					self.nextLoc = [self.currentLoc[0], self.currentLoc[1] + 1]
+			elif self.route[0] == Constants.RIGHT_DIR:
+				if self.map[self.currentLoc[0]+1][self.currentLoc[1]].isOccupied == False:
+					self.nextLoc = [self.currentLoc[0]+1, self.currentLoc[1]]
+			elif self.route[0] == Constants.LEFT_DIR:
+				if self.map[self.currentLoc[0]-1][self.currentLoc[1]].isOccupied == False:
+					self.nextLoc = [self.currentLoc[0]-1, self.currentLoc[1]]
+
+		# normal movement
 		if Constants.UP_DIR in self.map[self.currentLoc[0]][self.currentLoc[1]].exitDirection:
 			if self.route[0] in self.map[self.currentLoc[0]][self.currentLoc[1] - 1].exitDirection and self.map[self.currentLoc[0]][self.currentLoc[1] - 1].isOccupied == False and self.calcCanEnterIntersection():
 				self.nextLoc = [self.currentLoc[0],self.currentLoc[1] - 1]

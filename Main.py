@@ -21,7 +21,7 @@ pSpawnWest = 0.25
 pSpawnEast = 0.25
 
 
-maxCarCounter = 100
+maxCarCounter = 20
 totalCars = 0
 carsDespawnCounter = 0
 carsSpawnCounter = 0
@@ -29,7 +29,7 @@ simTimeCounter = 0
 timeConstraint = 0.33
 heuristicToUse = 2
 
-carsPerSec = 10
+carsPerSec = 2
 
 algoModeOn = True # turn to FALSE to use normal timer mode
 
@@ -50,6 +50,18 @@ totalCars = 0
 stoplight_ID_counter = 0
 
 timerFinishedBool = False
+
+W  = '\033[0m'  # Default (White/Black) (normal)
+R  = '\033[31m' # red
+G  = '\033[32m' # green
+O  = '\033[33m' # orange
+B  = '\033[34m' # blue
+P  = '\033[35m' # purple
+Wh = '\033[37m' # WHITE
+
+BG_BLACK = '\033[40m'
+BG_RED = '\033[41m'
+BG_BLUE = '\033[44m'
 
 # #
 # functions
@@ -149,20 +161,21 @@ def printMap():
 		for x in range(int(sizeList[0])):
 			# print map[x][y].exitDirection
 			if map[x][y].isOccupied:
-				print 'C',
+				print 'C'+W,
 				#counter += 1
 			elif Constants.LEFT_DIR in map[x][y].exitDirection:
-				print u'\u2190', # unicode character for left arrow
+				print B+u'\u2190'+W, # unicode character for left arrow
 			elif Constants.RIGHT_DIR in map[x][y].exitDirection:
-				print u'\u2192', # unicode character for right arrow
+				print B+u'\u2192'+W, # unicode character for right arrow
 			elif Constants.UP_DIR in map[x][y].exitDirection:
-				print u'\u2191',
+				print R+u'\u2191'+W,
 			elif Constants.DOWN_DIR in map[x][y].exitDirection:
-				print u'\u2193',
+				print R+u'\u2193'+W,
 			elif Constants.NO_DIR in map[x][y].exitDirection:
-				print '*',
+				print Wh+'*'+W,
 			else:
 				print ' ',
+				pass
 		print
 	#print("COUNTER = " + str(counter))
 
@@ -180,7 +193,7 @@ def spawnCar(carID, counterIn):
 	timeObjects.append(Car(startLoc,endLoc, carID, direction, map))
 	'''
 
-	print 'Spawning car with ID # ', carID
+	#print 'Spawning car with ID # ', carID
 
 	global map
 	global timeObjects
@@ -225,9 +238,9 @@ def spawnCar(carID, counterIn):
 		tempEndLoc = [tempStartLoc[0] + (int(sizeList[0]) - 1), tempStartLoc[1]]
 		tempRoute = [Constants.RIGHT_DIR] * int(sizeList[0])
 
-	print "Start Loc: ", tempStartLoc
-	print "End Loc: ", tempEndLoc
-	print "route: ", tempRoute
+	#print "Start Loc: ", tempStartLoc
+	#print "End Loc: ", tempEndLoc
+	#print "route: ", tempRoute
 
 	if (map[tempStartLoc[0]][tempStartLoc[1]].isOccupied == False):
 		map[tempStartLoc[0]][tempStartLoc[1]].isOccupied = True
@@ -248,6 +261,8 @@ def timerFinished():
 # Main
 
 def main():
+
+	print(R+"hello how are you"+W)
 
 	global averageLifespan
 	global carsArrived
@@ -275,12 +290,12 @@ def main():
 
 	print "Simulation Start\n"
 
-	print(carsDespawnCounter)
-	print(totalCars)
+	#print(carsDespawnCounter)
+	#print(totalCars)
 
 	while(carsDespawnCounter < maxCarCounter): # sim time is how many times to run a simulation tick (1 car length)
 
-		print("CAR DESPAWN COUNTER: " + str(carsDespawnCounter))
+		print("Cars Despawned: " + str(carsDespawnCounter))
 		simTimeCounter += 1
 
 		# randomly spawns new cars until carSpawnCounter == totalCars
