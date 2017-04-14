@@ -379,11 +379,18 @@ def main():
 			outfile.write('\t\t\tAverage Car Lifespan: ')
 			if carsArrived > 0:
 				print(averageLifespan/carsArrived)
+				if algoModeOn == True:
+					lifespan_alg_on = averageLifespan/carsArrived
+				elif algoModeOn == False:
+					lifespan_alg_off = averageLifespan/carsArrived
+
 				outfile.write(str(averageLifespan/carsArrived) + '\n')
 			else:
 				print("0")
 				outfile.write('0')
 			print("CARS ARRIVED: " + str(carsDespawnCounter))
+
+		outfile.write('\t\t\tTime Improvement with Algorithm on: ' + str(round(float((lifespan_alg_off - lifespan_alg_on))/float(lifespan_alg_off) * 100,2)) + '%\n')
 
 
 if __name__ == "__main__":
