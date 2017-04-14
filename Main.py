@@ -340,9 +340,10 @@ def main():
 				print "ALGORITHM ON"
 				outfile.write('\t\tAlgorithm ON:\n')
 
+
 			while(carsDespawnCounter < maxCarCounter): # sim time is how many times to run a simulation tick (1 car length)
 
-				print("Cars Despawned: " + str(carsDespawnCounter))
+				# print("Cars Despawned: " + str(carsDespawnCounter))
 				simTimeCounter += 1
 
 				# randomly spawns new cars until carSpawnCounter == totalCars
@@ -350,8 +351,9 @@ def main():
 					if carsSpawnCounter < maxCarCounter:
 						carsSpawnCounter = spawnCar(simTimeCounter + (y*carsPerSec), carsSpawnCounter)
 				printMap()
+				print("\n\n")
 
-				map = algo.calcNextState(map, sizeList, heuristicToUse, timeObjects)
+				map = algo.calcNextState(map, sizeList, heuristicToUse, timeObjects, algoModeOn)
 
 				for obj in timeObjects:
 					if obj.type == "Car":

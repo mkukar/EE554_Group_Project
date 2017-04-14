@@ -30,53 +30,59 @@ class Algorithm():
 	# SUMMARY: Calculates the next state using our core algorithm within the time requirement set in constructor
 	# ARGS: curState - current state map with cars
 	# RETURNS: nextState - map of same size as curState with new directions for the map
-	def calcNextState(self, curState, sizeList, heuristicIn, timeObjects):
+	def calcNextState(self, curState, sizeList, heuristicIn, timeObjects, algoEnabled):
 
-		# new algorithm design - starts a timer thread and then evaluates algorithm
-		# if the timer thread is called before the algorithm is executed, just return the same state (no change)
-		# if the thread ending is not reached, then we return our own heuristic
-		timer = threading.Timer(self.timeConstraintFloat, self.finishCalcNextState)
-		self.timerFinished = False
-		timer.start()
+		if algoEnabled:
 
-		nextState = curState
-		nextState[1][1] = Road()
-		# right now just does a single loop since we don't care to do more than that
-		heuristicArr = self.calc_heuristic(nextState, sizeList, heuristicIn, timeObjects)
+			# new algorithm design - starts a timer thread and then evaluates algorithm
+			# if the timer thread is called before the algorithm is executed, just return the same state (no change)
+			# if the thread ending is not reached, then we return our own heuristic
+			timer = threading.Timer(self.timeConstraintFloat, self.finishCalcNextState)
+			self.timerFinished = False
+			timer.start()
 
-		while not self.timerFinished:
-			for obj in timeObjects:
-				# print("TIMER IS CURRENTLY: " + str(self.timerFinished))
-				if not self.timerFinished:
-					if obj.type == "Stoplight":
-						if obj.ID in heuristicArr:
-							# sums LEFT RIGHT traffic and see if it is greater than UP DOWN. If yes, change state to LR
-							curHeuristic = heuristicArr[obj.ID]
-							# [L, R, U, D]
-							if (curHeuristic[0] + curHeuristic[1]) > (curHeuristic[2] + curHeuristic[3]):
-								#print("GO TO LR STATE")
-								# state 1 is UP DOWN STATE (NOTE - relies on valid UP DOWN and LR states)
-								obj.setNextState(1)
-							elif (curHeuristic[0] + curHeuristic[1]) < (curHeuristic[2] + curHeuristic[3]):
-								#print("GO TO UP DOWN STATE")
-								# state 0 is UP DOWN STATE (NOTE - Relies on stoplight having a valid up/down state)
-								obj.setNextState(0)
-							else:
-								#print("Does nothing since traffic is even.")
-								pass
-				else:
-					timer.join()
-					return curState
+			nextState = curState
+			nextState[1][1] = Road()
+			# right now just does a single loop since we don't care to do more than that
+			heuristicArr = self.calc_heuristic(nextState, sizeList, heuristicIn, timeObjects)
 
-			# if it makes it this far, cancel timer and then just return the next state
-			#timer.cancel()
+			while not self.timerFinished:
+				for obj in timeObjects:
+					# print("TIMER IS CURRENTLY: " + str(self.timerFinished))
+					if not self.timerFinished:
+						if obj.type == "Stoplight":
+							if obj.ID in heuristicArr:
+								# sums LEFT RIGHT traffic and see if it is greater than UP DOWN. If yes, change state to LR
+								curHeuristic = heuristicArr[obj.ID]
+								# [L, R, U, D]
+								if (curHeuristic[0] + curHeuristic[1]) > (curHeuristic[2] + curHeuristic[3]):
+									#print("GO TO LR STATE")
+									# state 1 is UP DOWN STATE (NOTE - relies on valid UP DOWN and LR states)
+									obj.setNextState(1)
+								elif (curHeuristic[0] + curHeuristic[1]) < (curHeuristic[2] + curHeuristic[3]):
+									#print("GO TO UP DOWN STATE")
+									# state 0 is UP DOWN STATE (NOTE - Relies on stoplight having a valid up/down state)
+									obj.setNextState(0)
+								else:
+									#print("Does nothing since traffic is even.")
+									pass
+					else:
+						timer.join()
+						return curState
+
+				# if it makes it this far, cancel timer and then just return the next state
+				#timer.cancel()
+				timer.join()
+				return curState
+
+			timer.cancel()
 			timer.join()
+
+			return curState # if we time out, we end up here
+
+		else:
+			# default returns current state
 			return curState
-
-		timer.cancel()
-		timer.join()
-
-		return curState # if we time out, we end up here
 
 
 		'''

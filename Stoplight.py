@@ -281,8 +281,8 @@ class Stoplight(TimeObject):
                         self.setNextState(self.curStateIndex)
 
                     else:
+                        self.setNextState(self.curStateIndex + 1)
                         self.curStateIndex += 1
-                        self.setNextState(self.curStateIndex)
                     self.changeState()
 
 
