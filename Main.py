@@ -23,15 +23,9 @@ pSpawnEast = 0.25
 
 maxCarCounter = 20
 totalCars = 0
-carsDespawnCounter = 0
-carsSpawnCounter = 0
 simTimeCounter = 0
 timeConstraint = 0.33
 heuristicToUse = 2
-
-carsPerSec = 2
-
-algoModeOn = True # turn to FALSE to use normal timer mode
 
 mapFileName = "map.txt"
 sizeList = []
@@ -43,7 +37,6 @@ validStartIndexesEast = []
 counter = 0
 map = [[Road() for i in range(2)] for j in range(2)] # an array of roads
 
-averageLifespan = 0
 carsArrived = 0
 totalCars = 0
 
@@ -262,76 +255,133 @@ def timerFinished():
 
 def main():
 
-	print(R+"hello how are you"+W)
-
-	global averageLifespan
 	global carsArrived
 	global map
 	global simTimeCounter
-	global carsDespawnCounter
 	global totalCars
-	global carsSpawnCounter
 	global timerFinishedBool
+	global pSpawnNorth
+	global pSpawnSouth
+	global pSpawnWest
+	global pSpawnEast
 
-	print "Initializing map...\n"
-
-	readMap()
-	printMap()
+	seed_val = 1
+	sim_counter = 0
 
 	print("MAP INFO:")
 	print("X SIZE: " + str(len(map)))
 	print("Y SIZE: " + str(len(map[:])))
 
-	print "Initializing algorithm...\n"
-	# initialize algorithm class here
-	algo = Algorithm(timeConstraint)
+	simulation_list = []
+	with open('simulations.txt', 'r') as in_file:
+
+		for line in in_file:
+			# Skip comment lines which are designated with '#'
+			if line[:1] == '#':
+				continue
+			# skip empty lines
+			if not line.strip():
+				continue
+
+			simulation_list.append(line.strip().split(','))
+
+	print simulation_list
+
+	outfile = open('simulation_results.txt', 'w')
 
 	print "Initialization complete.\n"
 
 	print "Simulation Start\n"
 
-	#print(carsDespawnCounter)
-	#print(totalCars)
+	for simulation in simulation_list:
+		sim_counter += 1
 
-	while(carsDespawnCounter < maxCarCounter): # sim time is how many times to run a simulation tick (1 car length)
+		pSpawnNorth = float(simulation[0])
+		pSpawnSouth = float(simulation[1])
+		pSpawnEast = float(simulation[2])
+		pSpawnWest = float(simulation[3])
+		carsPerSec = int(simulation[4])
+		maxCarCounter = int(simulation[5])
 
-		print("Cars Despawned: " + str(carsDespawnCounter))
-		simTimeCounter += 1
 
-		# randomly spawns new cars until carSpawnCounter == totalCars
-		for y in range(carsPerSec):
-			if carsSpawnCounter < maxCarCounter:
-				carsSpawnCounter = spawnCar(simTimeCounter + (y*carsPerSec), carsSpawnCounter)
-		printMap()
+		seed_val += 100
+		print "Seeding Random Number Generator with " + str(seed_val)
+		random.seed(seed_val)
 
-		map = algo.calcNextState(map, sizeList, heuristicToUse, timeObjects)
+		outfile.write('Simulation ' + str(sim_counter) + ' with seed #: ' + str(seed_val) + '\n')
+		outfile.write('\tSpawning probabilities: ' + str([pSpawnNorth,pSpawnSouth,pSpawnEast,pSpawnWest]) + '\n')
 
-		for obj in timeObjects:
-			if obj.type == "Car":
-				obj.setNextLocation()
-			elif obj.type == "Stoplight":
-				obj.tick(algoModeOn) # TRUE to use algorithm mode
-		for obj in timeObjects:
-			if obj.type == "Car":
-				res = obj.moveCar()
-				if res is True:
-					carsDespawnCounter += 1
-					map[obj.currentLoc[0]][obj.currentLoc[1]].isOccupied = False
 
-					#print("CAR DESPAWNED. WAS ALIVE FOR " + str(obj.timeAlive))
-					averageLifespan += obj.timeAlive
-					carsArrived += 1
-					timeObjects.remove(obj)
+		print "Running simulation with spawning probabilities", [pSpawnNorth,pSpawnSouth,pSpawnEast,pSpawnWest]
 
-	print "Simulation Complete\n"
-	printMap()
+		# algoModeOn = False
 
-	print("AVERAGE CAR LIFESPAN: ")
-	if carsArrived > 0:
-		print(averageLifespan/carsArrived)
-	else:
-		print("0")
-	print("CARS ARRIVED: " + str(carsDespawnCounter))
+		for i in range(2):
+			carsDespawnCounter = 0
+			carsSpawnCounter = 0
+			averageLifespan = 0
+			carsArrived = 0
+
+			print "Initializing map...\n"
+
+			readMap()
+			printMap()
+
+			print "Initializing algorithm...\n"
+			# initialize algorithm class here
+			algo = Algorithm(timeConstraint)
+
+			if i == 0:
+				algoModeOn = False # turn to FALSE to use normal timer mode
+				print "ALGORITHM OFF"
+				outfile.write('\t\tAlgorithm OFF:\n')
+			elif i == 1:
+				algoModeOn = True
+				print "ALGORITHM ON"
+				outfile.write('\t\tAlgorithm ON:\n')
+
+			while(carsDespawnCounter < maxCarCounter): # sim time is how many times to run a simulation tick (1 car length)
+
+				print("Cars Despawned: " + str(carsDespawnCounter))
+				simTimeCounter += 1
+
+				# randomly spawns new cars until carSpawnCounter == totalCars
+				for y in range(carsPerSec):
+					if carsSpawnCounter < maxCarCounter:
+						carsSpawnCounter = spawnCar(simTimeCounter + (y*carsPerSec), carsSpawnCounter)
+				printMap()
+
+				map = algo.calcNextState(map, sizeList, heuristicToUse, timeObjects)
+
+				for obj in timeObjects:
+					if obj.type == "Car":
+						obj.setNextLocation()
+					elif obj.type == "Stoplight":
+						obj.tick(algoModeOn) # TRUE to use algorithm mode
+				for obj in timeObjects:
+					if obj.type == "Car":
+						res = obj.moveCar()
+						if res is True:
+							carsDespawnCounter += 1
+							map[obj.currentLoc[0]][obj.currentLoc[1]].isOccupied = False
+
+							#print("CAR DESPAWNED. WAS ALIVE FOR " + str(obj.timeAlive))
+							averageLifespan += obj.timeAlive
+							carsArrived += 1
+							timeObjects.remove(obj)
+
+			print "Simulation Complete\n"
+			printMap()
+
+			print("AVERAGE CAR LIFESPAN: ")
+			outfile.write('\t\t\tAverage Car Lifespan: ')
+			if carsArrived > 0:
+				print(averageLifespan/carsArrived)
+				outfile.write(str(averageLifespan/carsArrived) + '\n')
+			else:
+				print("0")
+				outfile.write('0')
+			print("CARS ARRIVED: " + str(carsDespawnCounter))
 
 
 if __name__ == "__main__":
