@@ -340,11 +340,16 @@ def main():
 				print "ALGORITHM ON"
 				outfile.write('\t\tAlgorithm ON:\n')
 
-
+			printerCounter = 0
 			while(carsDespawnCounter < maxCarCounter): # sim time is how many times to run a simulation tick (1 car length)
 
 				# print("Cars Despawned: " + str(carsDespawnCounter))
 				simTimeCounter += 1
+				printerCounter += 1
+
+				print '.',
+				if (printerCounter % 30) ==  0:
+					print('\n')
 
 				# randomly spawns new cars until carSpawnCounter == totalCars
 				for y in range(carsPerSec):
@@ -372,7 +377,7 @@ def main():
 							carsArrived += 1
 							timeObjects.remove(obj)
 
-			print "Simulation Complete\n"
+			print "\nSimulation Complete\n"
 			printMap()
 
 			print("AVERAGE CAR LIFESPAN: ")
