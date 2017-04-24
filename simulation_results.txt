@@ -3,19 +3,10 @@ Simulation 1 with seed #: 101
 		Algorithm OFF:
 			Average Car Lifespan: 149
 		Algorithm ON:
-			Average Car Lifespan: 137
-			Time Improvement with Algorithm on: 8.05%
+			Average Car Lifespan: 126
+			Time Improvement with Algorithm on: 15.44%
 Simulation 2 with seed #: 201
 	Spawning probabilities: [0.4, 0.4, 0.1, 0.1]
 		Algorithm OFF:
 			Average Car Lifespan: 143
 		Algorithm ON:
-			Average Car Lifespan: 101
-			Time Improvement with Algorithm on: 29.37%
-Simulation 3 with seed #: 301
-	Spawning probabilities: [0.4, 0.4, 0.1, 0.1]
-		Algorithm OFF:
-			Average Car Lifespan: 144
-		Algorithm ON:
-			Average Car Lifespan: 100
-			Time Improvement with Algorithm on: 30.56%
