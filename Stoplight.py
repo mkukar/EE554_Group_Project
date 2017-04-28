@@ -35,6 +35,9 @@ class Stoplight(TimeObject):
     # Variables
     # #
 
+    minStateTime = 2
+    curStateTime = 0
+
     startIndex = [-1,-1] # x,y coordinates of the upper left corner (starting index)
     endIndex = [-1,-1] # x,y coordinates of the lower right corner (ending index, inclusive)
     xSize = -1 # absolute size (e.g. 1 is just 1 index wide, 2 is two index wide, etc.)
@@ -235,6 +238,7 @@ class Stoplight(TimeObject):
         self.nextStateJustSet = False
         self.writeStateToMap(self.nextState)
         self.curStateIndex = self.nextState
+        self.curStateTime = 0
 
 
     '''
@@ -255,7 +259,9 @@ class Stoplight(TimeObject):
 
     # algoModeEnabled means we use the algorithm to determine enxt state, not the timer
     def tick(self, algoModeEnabled):
+        self.curStateTime += 1
         if algoModeEnabled:
+            
             #print("IN TICK FOR ALGO")
             if self.nextStateJustSet: # bug here - if next state is the same as current state, don't need yellow light
                 if self.yellowTimer <= self.yellowTimerMax:
@@ -288,11 +294,10 @@ class Stoplight(TimeObject):
 
     def setNextState(self, nextStateIndex):
         # CHECKS HERE TO MAKE SURE NEXT STATE IS DIFFERENT THAN CURRENT STATE
-        if nextStateIndex != self.curStateIndex:
+        if nextStateIndex != self.curStateIndex and self.curStateTime >= self.minStateTime:
             # note - when called it starts the yellow light timer
             self.nextState = nextStateIndex
             self.nextStateJustSet = True
-
 
     def writeStateToMap(self, stateIndex):
         # print("WRITING STATE " + str(stateIndex) + " TO MAP")
